@@ -1,0 +1,51 @@
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> ans;
+        
+        sort(nums.begin(), nums.end());
+        for (int i = 0; i < nums.size(); i++) {
+            int target = -nums[i];
+            int left =  i + 1;
+            int right = nums.size() - 1;
+            
+            while (left < right) {
+                int sum = nums[left] + nums[right];
+                
+                if (sum < target) {
+                    left++;
+                } else if (sum >target) {
+                    right--;
+                }else if (nums[left] + nums[right] == target) {
+                    vector<int> tempVec;
+                    tempVec.push_back(nums[i]);
+                    tempVec.push_back(nums[left]);
+                    tempVec.push_back(nums[right]);
+                    
+                    ans.push_back(tempVec);
+                    
+                    while (left < right && nums[left] == tempVec[1]) {
+                        left++;
+                    }
+
+                    while (right > left && nums[right] == tempVec[2]) {
+                        right--;
+                    }
+                }
+            }
+            while((i + 1) < nums.size() && nums[i + 1] == nums[i]) {    //aviod the duplicated 
+                i++;
+            }
+        }
+        
+        return ans;
+    }
+};
+
+
+
+
+
+/*
+  similar to two sum, but have one adittional pointer(the one in for loop)
+*/
