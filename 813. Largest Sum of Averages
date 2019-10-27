@@ -1,0 +1,38 @@
+class Solution {
+public:
+    double largestSumOfAverages(vector<int>& A, int K) {
+        int ALen = A.size();
+        double dp[K+1][ALen];
+        memset(dp,0,sizeof(dp));
+        //initialize the first row
+        double tempVal = 0;
+        for (int i = 0; i < ALen; i++) {
+            tempVal += A[i];
+            dp[1][i] = tempVal / (i+1);
+        }
+        for (int k = 2; k <= K; k++) {
+            for (int i = k - 1; i < ALen;i++) {
+                double current = 0;
+                int num = 0;
+                for (int j = i;j >= k - 1;j--) { //j is the one point from behind
+                    num++;
+                    current += A[j];
+                    dp[k][i] = max(dp[k][i],dp[k-1][j-1] + current/num);
+                }
+                
+            }
+        }
+        return dp[K][ALen-1];
+    }
+};
+
+
+
+/*
+  2D dp array, one dimention is K(how many group), the other dimention is i(how many characters)
+  dp[a][b] = max(dp[a][b],dp[c][d] + current/num)
+  
+  ex.
+  A = abcd, K = 3
+  max( (ab)(c)(d), a(bc)d, (a)(b)(cd) );
+*/
