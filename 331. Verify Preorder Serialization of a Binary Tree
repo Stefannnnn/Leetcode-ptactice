@@ -1,0 +1,32 @@
+class Solution {
+public:
+    bool isValidSerialization(string preorder) {
+        if (preorder.length() == 0) {
+            return false;
+        }
+        preorder += ',';
+        int capacity = 1;
+        int len = preorder.length();
+        for (int i = 0; i < len; i++) {
+            if (preorder[i] == ',') {
+                continue;
+            }
+            
+            capacity--;
+            if (capacity < 0) {
+                return false;
+            }
+            if(preorder[i] != '#'){
+                capacity += 2;
+                while (preorder[i] != ',') {
+                    i++;
+                }
+            }
+        }
+        return capacity == 0;
+    }
+};
+
+/*
+  
+*/
