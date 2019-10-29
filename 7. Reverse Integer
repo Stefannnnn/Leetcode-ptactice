@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int reverse(int x) {
+        double ans = 0;
+        double tempVal = 0;
+        
+        while (x) {
+            tempVal = x % 10;
+            if (ans * 10 > INT_MAX || ans * 10 < INT_MIN) {
+                return 0;
+            }
+            ans = tempVal + ans * 10;
+            x /= 10;
+        }
+        return ans;
+    }
+};
+
+
+
+/*
+  
+*/
