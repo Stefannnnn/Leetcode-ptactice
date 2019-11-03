@@ -1,0 +1,55 @@
+class Solution {
+public:
+    int numBusesToDestination(vector<vector<int>>& routes, int S, int T) {
+        if(S == T){
+            return 0;
+        }
+        //record every stops pass which lines
+        unordered_map<int,vector<int>>stop;  //stop, line
+        int numBusLine = routes.size();
+        for (int i = 0; i < numBusLine; i++) {
+            int numOfStop = routes[i].size();
+            for (int j = 0; j < numOfStop; j++) {
+                stop[routes[i][j]].push_back(i);
+            }
+        }
+        
+        
+        unordered_set<int> visitedStop;
+        unordered_set<int> visitedLine;
+        queue<int> Queue;   //stop
+        Queue.push(S);
+        int ans = 0;
+        //visitedStop.insert(S);
+        while (!Queue.empty()) {
+            int roundNum = Queue.size();
+            unordered_set<int> container;   //used to prevent the duplicated stop push into Queue
+            for (int i = 0; i < roundNum; i++) {
+                int currentStop = Queue.front();
+                Queue.pop();
+                //First, check if this stop is vistied or not. If not, search currentStop in every lines(except the lines visited). In the lines, push all stops into Queue
+                if (currentStop == T) {
+                    return ans;
+                }
+                
+                if (visitedStop.count(currentStop) == 0) {  //if this stop not yet been visited
+                    visitedStop.insert(currentStop);
+                    //for those lines with this stop
+                    for (int line:stop[currentStop]) {
+                        if(visitedLine.count(line) == 0){   //if the line has not yet been visited
+                            visitedLine.insert(line);
+                            for (int stop:routes[line]) {
+                                container.emplace(stop);
+                            }
+                        }
+                    }
+               }
+            }
+            for (int n:container) {
+                Queue.push(n);
+            }
+            ans++;
+        }
+        return -1;
+    }
+};
