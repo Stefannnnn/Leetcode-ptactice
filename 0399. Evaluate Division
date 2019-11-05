@@ -1,0 +1,43 @@
+class Solution {
+public:
+    vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries) {
+        //  a/b=2 could be thoght as "could arrive b from a, and the value is 2", also "could arrive a from b, and the value is 0.5"
+        unordered_map<string,vector<pair<string,float>>> Map;   //start point, target, value
+        int lenInput = equations.size();
+        for (int i = 0; i < lenInput; i++) {
+            Map[equations[i][0]].push_back(make_pair(equations[i][1],values[i]));
+            Map[equations[i][1]].push_back(make_pair(equations[i][0],1.0/values[i]));
+        }
+        
+        vector<double> ans;
+        int lenQuery = queries.size();
+        for (int i = 0; i < lenQuery; i++) {
+            //DFS
+            unordered_set<string> visited;
+            ans.push_back(DFS(queries[i][0], queries[i][1], 1, visited, Map));
+        }
+        return ans;
+    }
+    
+    float DFS (string start, string target, float accumulateValue, unordered_set<string> &visited, unordered_map<string,vector<pair<string,float>>> &Map) { 
+        //find target through Map
+        unordered_map<string,vector<pair<string,float>>>::iterator iter = Map.find(start);
+        //if cannot find this element in the Map, return -1
+        if (iter == Map.end()) {
+           return -1; 
+        }
+        
+        if(start == target){
+            return accumulateValue;
+        }
+        float ans = -1.0;
+        visited.insert(start);
+        
+        for (pair<string,float> n:iter->second) {
+            if(visited.count(n.first) == 0){
+                ans = max(ans,DFS(n.first,target,accumulateValue * n.second,visited,Map));
+            }
+        }
+        return ans;
+    }
+};
