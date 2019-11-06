@@ -1,0 +1,45 @@
+class Solution {
+public:
+    string minWindow(string S, string T) {
+        int lenS = S.length();
+        int lenT = T.length();
+        //The dp array present the "start position of substring"
+        vector<vector<int>> dp(lenT + 1, vector(lenS + 1, 0));
+        for (int i = 0; i <= lenS; i++) {
+            //when T.length == 0, meaning that S doesn't have the character that is the same as T, meaning that the "start position" will be the next position
+            dp[0][i] = i + 1;
+        }
+        
+        for (int i = 1; i <= lenT; i++) {
+            for (int j = 1; j <= lenS; j++) {
+                if (S[j - 1] == T[i - 1]) {
+                    //if s == t, the start point need to look at the previous one
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    //if s != t, the start point need to look at the s's previous one
+                    dp[i][j] = dp[i][j - 1];
+                }
+            }
+        }
+        
+        //print
+        // for (int i = 0; i <= lenT; i++) {
+        //     for (int j = 0; j <= lenS; j++) {
+        //         cout << dp[i][j] << " ";
+        //     }
+        //     cout << endl;
+        // }
+        
+        //find those start point of the T's last letter.
+        int minLen = INT_MAX;
+        int startPosition = 0;
+        for (int j = 0; j <= lenS; j++) {
+            if (dp[lenT][j] != 0 && j - dp[lenT][j] + 1 < minLen) {
+                minLen = j - dp[lenT][j] + 1;
+                startPosition = dp[lenT][j] - 1;
+            }
+        }
+        
+        return minLen == INT_MAX ? "":S.substr(startPosition,minLen);
+    }
+};
