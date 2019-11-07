@@ -1,0 +1,57 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> verticalTraversal(TreeNode* root) {
+        //track the x and y of every node, and put it into ans
+        vector<vector<int>> ans;
+        if (!root) {
+            return ans;
+        }
+        
+        map<int,vector<pair<int,int>>> myMap;   //x position(horizontal), y position(vertical. In here means distance from root), node value
+        queue<pair<TreeNode*,pair<int,int>>> Queue; //node, x, y(In here means distance from root)
+        Queue.push(make_pair(root,make_pair(0,0)));
+        
+        while (!Queue.empty()) {
+            pair<TreeNode*,pair<int,int>> tempEle = Queue.front();
+            Queue.pop();
+            
+            int tempX = tempEle.second.first;
+            int tempY = tempEle.second.second;
+            TreeNode* currentNode = tempEle.first;
+            
+            myMap[tempX].push_back(make_pair(tempY,currentNode->val));
+            
+            if (currentNode->left) {
+                Queue.push(make_pair(currentNode->left,make_pair(tempX - 1,tempY + 1)));
+            }
+            if (currentNode->right) {
+                Queue.push(make_pair(currentNode->right,make_pair(tempX + 1,tempY + 1)));
+            }
+        }
+        
+        int widthX = myMap.size();
+        ans.resize(widthX);
+        
+        map<int,vector<pair<int,int>>>::iterator iter;
+        int index = 0;
+        for (iter = myMap.begin();iter != myMap.end();iter++) {
+            vector<pair<int,int>> tempPair = iter->second;
+            //If you are using a sort with a comparison callback, compare the first numbers, and only if they match compare the second numbers.
+            sort(tempPair.begin(),tempPair.end());
+            for (pair<int,int> n:tempPair) {
+                ans[index].push_back(n.second);
+            }
+            index++;
+        }
+        return ans;
+    }
+};
