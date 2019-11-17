@@ -1,0 +1,50 @@
+class Solution {
+public:
+    vector<string> expand(string S) {
+        int lenS = S.length();
+        //create a container to store the info
+        vector<vector<char>> container;
+        int i = 0;
+        while (i < lenS) {
+            vector<char> tempVec;
+            if (S[i] == '{') {
+                i++;
+                while (S[i] != '}') {
+                    if (S[i] != ',') {
+                        tempVec.push_back(S[i]);
+                    }
+                    i++;
+                }
+                container.push_back(tempVec);
+            } else {
+                tempVec.push_back(S[i]);
+                container.push_back(tempVec);
+            }
+            i++;
+        }
+        
+        //use the DFS to traverse every level
+        vector<string> ansVec;
+        string tempString = "";
+        DFS(container, ansVec, 0, tempString);
+        sort(ansVec.begin(),ansVec.end());
+        return ansVec;
+    }
+    
+    void DFS (vector<vector<char>> container, vector<string> &ansVec, int level, string tempString) {
+        //terminal condition
+        if (level == container.size()) {
+            ansVec.push_back(tempString);
+            return;
+        }
+        
+        for (int i = 0; i < container[level].size(); i++) {
+            tempString += container[level][i];
+            DFS(container, ansVec, level + 1, tempString);
+            tempString.pop_back();
+        }
+        return;
+    }
+    
+    
+};
