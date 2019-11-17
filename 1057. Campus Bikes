@@ -1,0 +1,31 @@
+class Solution {
+public:
+    vector<int> assignBikes(vector<vector<int>>& workers, vector<vector<int>>& bikes) {
+        int lenW = workers.size();
+        int lenB = bikes.size();
+        // since the max distance is 2000
+        vector<vector<pair<int,int>>> info(2001);    //for eash distance -> vector<pair<worker id, bike id>>
+        for (int i = 0; i < lenW; i++) {
+            for (int j = 0; j < lenB; j++) {
+                //distance
+                int distance = abs(workers[i][0] - bikes[j][0]) + abs(workers[i][1] - bikes[j][1]);
+                //store in info
+                info[distance].push_back(make_pair(i,j));
+            }
+        }
+        
+        vector<int> ans(lenW,-1); 
+        vector<bool> bikeVisited(lenB,false);
+        
+        for (int d = 0; d < 2001; d++) {
+            for (int j = 0; j < info[d].size(); j++) {
+                if (bikeVisited[info[d][j].second] == false && ans[info[d][j].first] == -1) {
+                    bikeVisited[info[d][j].second] = true;
+                    ans[info[d][j].first] = info[d][j].second;
+                }
+            }
+        }
+        
+        return ans;
+    }
+};
