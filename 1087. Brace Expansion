@@ -46,5 +46,49 @@ public:
         return;
     }
     
+};
+
+
+
+
+//second way without space
+class Solution {
+public:
+    vector<string> expand(string S) {
+        vector<string> ans;
+        expandHelper(ans,S,0,"");
+        sort(ans.begin(), ans.end());
+        return ans;
+    }
+    
+     void expandHelper (vector<string> &ans, string S, int startIndex, string currentS) {
+         if (startIndex == S.length()) {
+             ans.push_back(currentS);
+             return;
+         }
+        if (S[startIndex] == '{') {
+            int end = S.find_first_of('}',startIndex);
+            if (end != string::npos) {
+                for (int i = startIndex + 1; i < end; i++) {
+                    if (S[i] != ',') {
+                        currentS = currentS + S[i];
+                        expandHelper(ans,S,end+1,currentS);
+                        currentS.pop_back();
+                    }
+                }
+            }
+        } else {
+            int end = S.find_first_of('{',startIndex);
+            if (end == string::npos) {
+                end = S.length();
+            }
+            for (int i = startIndex; i < end; i++) {
+                cout << S[i] << endl;
+                currentS = currentS + S[i];
+            }
+            expandHelper(ans,S,end,currentS);
+         }
+    }
+    
     
 };
