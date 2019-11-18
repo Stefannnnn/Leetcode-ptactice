@@ -1,0 +1,78 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+/* Find the left boundary, find the leaves, find the right boundary. If left boundary exits, remove the first leaf; if right boundat exits, remove the last leaf*/
+class Solution {
+public:
+    vector<int> boundaryOfBinaryTree(TreeNode* root) {
+        vector<int> ans;
+        if (!root) {
+            return ans;
+        }
+        ans.push_back(root->val);
+        if (!root->left && !root->right) {
+            return ans;
+        }
+        
+        TreeNode* tempNode = root->left;
+        while (tempNode) {
+            ans.push_back(tempNode->val);
+            if (!tempNode->left) {
+                tempNode = tempNode->right;
+            } else {
+                tempNode = tempNode->left;
+            }
+        }
+        
+        tempNode = root;
+        vector<int> tempVec;
+        DFS(tempNode,tempVec);
+        if (tempVec.size() != 0 && root->right) {
+            tempVec.pop_back();
+        }
+        if (root->left && tempVec.size() > 1) {
+            for (int i = 1; i < tempVec.size(); i++) {
+                ans.push_back(tempVec[i]);
+            }
+        } else if (!root->left) {
+            for (int i = 0; i < tempVec.size(); i++) {
+                ans.push_back(tempVec[i]);
+            }
+        }
+        
+        tempVec.clear();
+        tempNode = root->right;
+        while (tempNode) {
+            tempVec.push_back(tempNode->val);
+            if (!tempNode->right) {
+                tempNode = tempNode->left;
+            } else {
+                tempNode = tempNode->right;
+            }
+        }
+        for (int i = tempVec.size() - 1; i >= 0; i--) {
+            ans.push_back(tempVec[i]);
+        }
+        return ans;
+    }
+    
+    void DFS (TreeNode* root, vector<int> &tempVec) { 
+        if (!root->left && !root->right) {
+            tempVec.push_back(root->val);
+            return;
+        }
+        if (root->left) {
+            DFS(root->left,tempVec);
+        }
+        if (root->right) {
+            DFS(root->right,tempVec);
+        }
+        return;
+    }
+};
