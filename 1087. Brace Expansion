@@ -1,3 +1,4 @@
+/* Use DFS and BFS to traverse it*/
 class Solution {
 public:
     vector<string> expand(string S) {
@@ -51,7 +52,7 @@ public:
 
 
 
-//second way without space
+/*second way without space*/
 class Solution {
 public:
     vector<string> expand(string S) {
