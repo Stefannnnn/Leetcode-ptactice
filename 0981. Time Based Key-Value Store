@@ -1,0 +1,23 @@
+class TimeMap {
+public:
+    /** Initialize your data structure here. */
+    unordered_map<string,map<int,string>> Map;
+    map<int,string>::iterator iter;
+    TimeMap() {
+        
+    }
+    void set(string key, string value, int timestamp) {
+        Map[key][timestamp] = value;
+    }
+    string get(string key, int timestamp) {
+        iter = Map[key].upper_bound(timestamp);
+        return iter == Map[key].begin() ? "" : prev(iter)->second;  //when you use upper_bound and iter point to the .begin(), means you did not find the value you want(every element is bigger than the value)
+    }
+};
+
+/**
+ * Your TimeMap object will be instantiated and called as such:
+ * TimeMap* obj = new TimeMap();
+ * obj->set(key,value,timestamp);
+ * string param_2 = obj->get(key,timestamp);
+ */
