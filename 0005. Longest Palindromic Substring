@@ -1,0 +1,36 @@
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        //j...........i
+        int len = s.length();
+        if (len == 0) {
+            return "";
+        } else if (len == 1) {
+            return s;
+        }
+        pair<int,bool> dp[len][len];
+        for (int i = 0; i < len; i++) {
+            for (int j = 0; j < len; j++) {
+                if (i == j) {
+                    dp[i][j] = {1,true};
+                } else {
+                    dp[i][j] = {0,false};
+                }
+            }
+        }
+        int count = 0;
+        string ans = s.substr(0,1);
+        for (int i = 1; i < len; i++) {
+            for (int j = i-1; j >= 0; j--) {
+                if (s[i] == s[j] && (i-j<3 || dp[i-1][j+1].second == true)) {
+                    dp[i][j] = {dp[i-1][j+1].first+2,true};
+                    if (dp[i][j].first > count) {
+                        count = dp[i][j].first;
+                        ans = s.substr(j,i-j+1);
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+};
