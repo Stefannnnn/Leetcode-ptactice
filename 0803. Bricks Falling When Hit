@@ -1,0 +1,78 @@
+class Solution {
+public:
+    /* Use recursive to do search(DFS), and if the path reach x=0, then don't drop; or use another recursive to count how many drop. Tip:use another 2D array to record visited */
+    int visited[201][201];
+    vector<int> dr={-1,0,1,0};
+    vector<int> dc={0,1,0,-1};
+    int id = 0,n,m;
+    vector<vector<int>> g;
+    
+    vector<int> hitBricks(vector<vector<int>>& grid, vector<vector<int>>& hits) {
+        n = grid.size();
+        m = grid[0].size();
+        g.swap(grid);
+        vector<int> ans;
+        
+        for (vector<int> hit:hits) {
+            int rev = 0;
+            int x = hit[0];
+            int y = hit[1];
+            if (g[x][y] == 1) {
+                g[x][y] = 0;
+                for (int d = 0 ; d < 4; d++) {
+                    int x1 = x + dr[d];
+                    int y1 = y + dc[d];
+                    if (!valid(x1,y1) || g[x1][y1] == 0) {
+                        continue;
+                    }
+                    id++;
+                    if (falling(x1,y1)) {
+                        rev += countRemoval(x1,y1);
+                    }
+                }
+            }
+            ans.push_back(rev);
+        }
+        
+        return ans;
+    }
+    
+    bool falling (int x, int y) {
+        if (!valid(x,y) || g[x][y] == 0) {
+            return true;
+        }
+        if (visited[x][y] == id) {
+            return true;
+        }
+        if (x == 0) {
+            return false;
+        }
+        visited[x][y] = id;
+        for (int d = 0; d < 4; d++) {
+            int x1 = x + dr[d];
+            int y1 = y + dc[d];
+            if (!falling(x1,y1)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    int countRemoval (int x, int y) {
+        if (!valid(x,y) || g[x][y] == 0) {
+            return 0;
+        }
+        int ret = 1;
+        g[x][y] = 0;
+        for (int d = 0; d < 4; d++) {
+            int x1 = x + dr[d];
+            int y1 = y + dc[d];
+            ret += countRemoval(x1,y1);
+        }
+        return ret;
+    }
+    
+    bool valid (int x, int y) {
+        return 0 <= x && x < n && 0 <= y && y < m;
+    }
+};
