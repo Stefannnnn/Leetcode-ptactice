@@ -1,0 +1,72 @@
+/* .Solution1 */
+class Solution {
+public:
+    int carFleet(int target, vector<int>& position, vector<int>& speed) {
+        int len = position.size();
+        
+        //use a map to store. In this way, the key will be ordered by position
+        map<int,int> psPair;
+        for (int i = 0; i < len; i++) {
+            psPair[position[i]] = speed[i];
+        }
+        map<int,int>::iterator iter;
+        int index = 0;
+        vector<double> time(len,0.0);   //time has to order by position
+        vector<double>::iterator iterVec;
+        for (iter = psPair.begin();iter != psPair.end(); iter++) {
+            double value = (double)(target - iter->first)/(double)iter->second;
+            time[index] = value;
+            index++;
+            
+        }
+        
+        queue<int> Queue;
+        int ans = 0;
+        while (!time.empty()) {
+            int tsize = time.size();
+            double currentTime = time[tsize-1];
+            for (int i = tsize-1; i >= 0; i--) {
+                if (time[i] <= currentTime) {
+                    Queue.push(i);
+                }
+            }
+            if (!Queue.empty()) {
+                ans++;;
+            }
+            while (!Queue.empty()) {
+                int index = Queue.front();
+                time.erase(time.begin() + index);
+                Queue.pop();
+            }
+        }
+        return ans;
+    }
+};
+
+
+
+
+/* Sloution2 */
+class Solution {
+public:
+    int carFleet(int target, vector<int>& position, vector<int>& speed) {
+        int len = position.size();
+        /* map store position:time */
+        map<int,double>Map;
+        for (int i = 0; i < len; i++) {
+            Map[position[i]] = (double)(target - position[i]) / (double)speed[i];
+        }
+        map<int,double>::reverse_iterator riter;
+        double current = 0;
+        int ans = 0;
+        /* when encounter a bigger time value, means that is another fleet */
+        for (riter = Map.rbegin(); riter != Map.rend(); riter++) {
+            if (riter->second > current) {
+                current = riter->second;
+                ans++;
+            }
+        }
+        return ans;
+    }
+};
+
