@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int minPathSum(vector<vector<int>>& grid) {
+        int lenW = grid.size();
+        if (lenW == 0) {
+            return 0;
+        }
+        int lenL = grid[0].size();
+        vector<vector<int>> grid2(lenW,vector<int>(lenL,0));
+        int accumulate = 0;
+        for (int i = 0; i < lenL; i++) {
+            accumulate += grid[0][i];
+            grid2[0][i] = accumulate;
+        }
+        accumulate = 0;
+        for (int i = 0; i < lenW; i++) {
+            accumulate += grid[i][0];
+            grid2[i][0] = accumulate;
+        }
+        
+        
+        for (int i = 1; i < lenW; i++) {
+            for (int j = 1; j < lenL; j++) {
+                grid2[i][j] = min(grid2[i-1][j],grid2[i][j-1]) + grid[i][j];
+            }
+        }
+        
+        
+        return grid2[lenW-1][lenL-1];
+    }
+};
