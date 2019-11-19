@@ -1,0 +1,27 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int pathSum(TreeNode* root, int sum) {
+        if (!root) {
+            return 0;
+        }
+        /* Because it does not neccessary start from root, so add two pathSum() */
+        return DFS(root,sum) + pathSum(root->left,sum) + pathSum(root->right,sum);
+    }
+    
+    int DFS (TreeNode* root, int sum) {
+        if (!root) {
+            return 0;
+        }
+        /* When accumulated root->val == sum, we still keep doing that */
+        return (root->val == sum ? 1:0) + DFS(root->left,sum - root->val) + DFS(root->right, sum - root->val);
+    }
+};
