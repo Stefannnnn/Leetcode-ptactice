@@ -1,0 +1,29 @@
+class Solution {
+public:
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int K) {
+        vector<vector<int>> ans;
+        if (points.size() == 0 || K == 0) {
+            return ans;
+        }
+        /* Create the map */
+        map<long,vector<vector<int>>>Map;   //the same distance could have multiple points
+        for (vector<int> n:points) {
+            long distance = n[0] * n[0] + n[1] * n[1];
+            Map[distance].push_back(n);
+        }
+        
+        /* Find the first K */
+        map<long,vector<vector<int>>>::iterator iter = Map.begin();
+        while (ans.size() < K) {
+            int len = iter->second.size();
+            for (int i = 0; i < len; i++) {
+                ans.push_back(iter->second[i]);
+            }
+            iter++;
+            if (iter == Map.end()) {
+                break;
+            }
+        }
+        return ans;
+    }
+};
