@@ -1,0 +1,23 @@
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        vector<vector<int>> ans;
+        
+        sort(intervals.begin(),intervals.end());
+        int len = intervals.size();
+        for (int i = 0; i < len; i++) {
+            if (i != len - 1 && intervals[i][1] >= intervals[i+1][0]) {
+                //change the head
+                intervals[i+1][0] = intervals[i][0];
+                //change the tail
+                if (intervals[i][1] >= intervals[i+1][1]) {
+                    intervals[i+1][1] = intervals[i][1];
+                }
+            } else {
+                ans.push_back(intervals[i]);
+            }
+        }
+        
+        return ans;
+    }
+};
