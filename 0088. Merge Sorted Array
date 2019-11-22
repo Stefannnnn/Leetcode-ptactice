@@ -1,0 +1,31 @@
+class Solution {
+public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        if (n == 0) {
+            return;
+        }
+        
+        int p1 = m - 1;
+        int p2 = n - 1;
+        int currentP = nums1.size() - 1;
+        
+        while (p1 >= 0 && p2 >= 0) {
+            if (nums1[p1] >= nums2[p2]) {
+                nums1[currentP] = nums1[p1];
+                currentP--;
+                p1--;
+            } else {
+                nums1[currentP] = nums2[p2];
+                currentP--;
+                p2--;
+            }
+        }
+        
+        while (p2 >= 0) {
+            nums1[currentP] = nums2[p2];
+            currentP--;
+            p2--;
+        }
+        return;
+    }
+};
