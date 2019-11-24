@@ -1,0 +1,19 @@
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        
+        unordered_map<int,int> Map;
+        for(int i=0;i<nums.size();i++){
+            unordered_map<int,int>::iterator iter;
+            iter = Map.find(target - nums[i]);
+            if(iter != Map.end()){
+                return {iter->second,i};
+            }
+            Map[nums[i]] = i;
+            
+        }
+        
+        return {};
+    }
+};
+
