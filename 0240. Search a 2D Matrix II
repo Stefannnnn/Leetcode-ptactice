@@ -1,0 +1,33 @@
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        //always remember, doing binary search, inlcude the boundry, but add 1 when you run the next run
+        
+        //when doing matrix check, have to check the x first, return false if x = 0, or when you access y, it will cause error
+        int h = matrix.size();
+        if (h <= 0) {
+            return false;
+        }
+        int w = matrix[0].size();
+        if (w <= 0) {
+            return false;
+        }
+        
+        int i = 0;
+        int j = w - 1;
+        while (i >= 0 && i < h && j >= 0 && j < w) {
+            if (matrix[i][j] == target) {
+                return true;
+            }
+            
+            if(matrix[i][j] < target) {
+                i++;
+            } else if (matrix[i][j] > target) {
+                j--;
+            }
+        }
+        
+        return false;
+        
+    }
+};
