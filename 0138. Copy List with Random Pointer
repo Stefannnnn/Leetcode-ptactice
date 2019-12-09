@@ -18,48 +18,54 @@ public:
 class Solution {
 public:
     Node* copyRandomList(Node* head) {
-        if(!head){
-            return head;
+        /* 
+        1.When you create a Node, you have to set up all property, even though they are NULL, still neet to set up 
+        */
+        
+        if (!head) {
+            return NULL;
         }
         
-        Node* cur_node = head;
-        Node* temp_node = head;
-        //set the val and next pointer to new node
-        while(cur_node) {
-            temp_node = cur_node->next;
-            cur_node->next = new Node(cur_node->val);
-            cur_node->next->next = temp_node;
-            cur_node = temp_node;
+        Node* newNode;
+        Node* oldNode = head;
+        //First, create new node and link it between the original list
+        while (oldNode) {
+            Node* tempNode = new Node(oldNode->val,NULL,NULL);
+            tempNode->next = oldNode->next;
+            oldNode->next = tempNode;
+            oldNode = tempNode->next;
         }
-        //set the random pointers
-        cur_node = head;
-        while(cur_node) {
-            if(!cur_node->random) {
-                cur_node->next->random = NULL;
-            }
-            else {
-                cur_node->next->random = cur_node->random->next;
+        
+        //Second, set up the random pointer
+        oldNode = head;
+        while (oldNode) {
+            //the random pointer could be null
+            if (oldNode->random) {
+                oldNode->next->random = oldNode->random->next;
+            } else {
+                oldNode->next->random = NULL;
             }
             
-            cur_node = cur_node->next->next;
+            oldNode = oldNode->next->next;
         }
-        //link the new nodes
-        cur_node = head;
-        Node* ans_node = head->next;
-        while(cur_node){
-            temp_node = cur_node->next;
-            cur_node->next = temp_node->next;
-            if(!temp_node->next) {
-                cur_node->next = NULL;
-                temp_node->next = NULL;
+        
+        
+        //Third, link the next pointer (for both original list and new list)
+        Node* ansNode = head->next;
+        oldNode = head;
+        while (oldNode) {
+            newNode = oldNode->next;
+            oldNode->next = newNode->next;
+            if (!newNode->next) {
+                oldNode->next = NULL;
+                newNode->next = NULL;
                 break;
             }
-            else {
-                temp_node->next = cur_node->next->next;
-            }
-            cur_node = cur_node->next;
-            temp_node = temp_node->next;
+            newNode->next = oldNode->next->next;
+            oldNode = oldNode->next;
+            
         }
-        return ans_node;
+        
+        return ansNode;
     }
 };
