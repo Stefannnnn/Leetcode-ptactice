@@ -1,0 +1,72 @@
+class Solution {
+public:
+    string mostCommonWord(string paragraph, vector<string>& banned) {
+        unordered_set<string> Set;
+        for (string &ban : banned) {
+            Set.insert(ban);
+        }
+        
+        unordered_map<string,int>Map;
+        unordered_map<string,int>::iterator iter;
+        int len = paragraph.length();
+        int indexWord = 0;
+        while (indexWord < len) {
+            string tempWord = "";
+            // Find the start index of a word
+            while (indexWord < len && !isWord(paragraph[indexWord])) {
+                indexWord++;
+            }
+            if (indexWord >= len) { // In case string = "abd, "
+                break;
+            }
+            int start = indexWord;
+            // Find the end index of a word
+            while (indexWord < len && isWord(paragraph[indexWord])) {
+                toLower(paragraph[indexWord]);
+                indexWord++;
+            }
+            int end = indexWord - 1;
+            // get the word
+            tempWord = paragraph.substr(start,end - start + 1);
+            
+            
+            
+            // Only not banned word can be put into Map
+            if (Set.count(tempWord) == 0) {
+                iter = Map.find(tempWord);
+                if (iter == Map.end()) {
+                    Map[tempWord] = 1;
+                } else {
+                    iter->second++;
+                }
+            }
+        }
+        
+        string ans = "";
+        int count = 0;
+        for (iter = Map.begin();iter != Map.end();iter++) {
+            if (iter->second > count) {
+                ans = iter->first;
+                count = iter->second;
+            }
+        }
+        
+        return ans;
+    }
+    
+    
+    bool isWord (char ch) {
+        if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
+            return true;
+        }
+        return false;
+    }
+    
+    void toLower (char &ch) {
+        if (ch >= 'A' && ch <= 'Z') {
+            ch = ch - ('A' - 'a');
+        }
+        return;
+    }
+    
+};
