@@ -21,51 +21,46 @@ public:
         /* 
         1.When you create a Node, you have to set up all property, even though they are NULL, still neet to set up 
         */
-        
         if (!head) {
             return NULL;
         }
         
-        Node* newNode;
-        Node* oldNode = head;
         //First, create new node and link it between the original list
-        while (oldNode) {
-            Node* tempNode = new Node(oldNode->val,NULL,NULL);
-            tempNode->next = oldNode->next;
-            oldNode->next = tempNode;
-            oldNode = tempNode->next;
+        Node* curNode = head;
+        while (curNode) {
+            Node* tempNode = new Node(curNode->val,NULL,NULL);
+            tempNode->next = curNode->next;
+            curNode->next = tempNode;
+            curNode = tempNode->next;
         }
         
         //Second, set up the random pointer
-        oldNode = head;
-        while (oldNode) {
-            //the random pointer could be null
-            if (oldNode->random) {
-                oldNode->next->random = oldNode->random->next;
+        curNode = head;
+        while (curNode) {
+            if (curNode->random) {
+                curNode->next->random = curNode->random->next;
             } else {
-                oldNode->next->random = NULL;
+                curNode->next->random = NULL;
             }
             
-            oldNode = oldNode->next->next;
+            curNode = curNode->next->next;
         }
-        
         
         //Third, link the next pointer (for both original list and new list)
-        Node* ansNode = head->next;
-        oldNode = head;
-        while (oldNode) {
-            newNode = oldNode->next;
-            oldNode->next = newNode->next;
-            if (!newNode->next) {
-                oldNode->next = NULL;
-                newNode->next = NULL;
+        curNode = head;
+        Node* root = curNode->next;
+        Node* newListNode = root;
+        while (curNode) {
+            curNode->next = curNode->next->next;
+            curNode = curNode->next;
+            if (newListNode->next) {
+                newListNode->next = newListNode->next->next;
+                newListNode = newListNode->next;
+            } else {
                 break;
             }
-            newNode->next = oldNode->next->next;
-            oldNode = oldNode->next;
-            
         }
         
-        return ansNode;
+        return root;
     }
 };
