@@ -1,25 +1,33 @@
 class Solution {
 public:
     int maxCoins(vector<int>& nums) {
+        int N = nums.size();
         nums.insert(nums.begin(),1);
         nums.insert(nums.end(),1);
-        int Length = nums.size();
-        vector<vector<int>> dp(Length,vector<int>(Length,0));
         
-        for (int len = 1; len <= Length; len++) {
-            for (int start = 1; start + len - 1 <= Length; start++) {
+        int length = nums.size();
+        // dp[i][j] means the max value we can get in range (i,j)
+        vector<vector<int>> dp(length,vector<int>(length,0));
+        
+        // We start from len
+        for (int len = 1; len <= N; len++) {
+            for (int start = 1; start <= N-len+1; start++) {
                 int end = start + len - 1;
-                int bestCoin = 0;
-                for (int Final = start; Final <= end;Final++) {
-                    int coin = dp[start][Final-1] + dp[Final+1][end];
-                    coin += nums[start-1] + nums[Final] + nums[end+1];
-                    if (coin > bestCoin) {
-                        bestCoin = coin;
+                
+                // Find the max value between start and end
+                int best = 0;
+                for (int k = start; k <= end; k++) {
+                    int coin = dp[start][k-1] + dp[k+1][end];
+                    coin += nums[start-1] * nums[k] * nums[end+1];
+                    if (coin > best) {
+                        best = coin;
                     }
                 }
-                dp[start][end] = bestCoin;
+                dp[start][end] = best;
             }
         }
-        return 1;
+        
+        return dp[1][N];
+        
     }
 };
