@@ -1,0 +1,100 @@
+//Method 1: use extra memory
+
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        int h = matrix.size();
+        if (h == 0) {
+            return vector<int>();
+        }
+        int w = matrix[0].size();
+        
+        int dir[4][2] = {{0,1},{1,0},{0,-1},{-1,0}};
+        int dirIndex = 0;
+        int total = h * w;
+        vector<int> ans;
+        int count = 1;
+        int x = 0;
+        int y = 0;
+        vector<vector<bool>> visited(h,vector<bool>(w,false));
+        while (count <= total) {
+            if (visited[x][y] == false) {
+                ans.push_back(matrix[x][y]);
+                visited[x][y] = true;
+                count++;
+            } else {
+                x -= dir[dirIndex][0];
+                y -= dir[dirIndex][1];
+                dirIndex++;
+                if (dirIndex == 4) {
+                    dirIndex = 0;
+                }
+            }
+            
+            x += dir[dirIndex][0];
+            y += dir[dirIndex][1];
+            if (x < 0 || x >= h || y < 0 || y >= w) {
+                x -= dir[dirIndex][0];
+                y -= dir[dirIndex][1];
+                dirIndex++;
+                if (dirIndex == 4) {
+                    dirIndex = 0;
+                }
+                x += dir[dirIndex][0];
+                y += dir[dirIndex][1];
+            }
+            
+        }
+        
+        return ans;
+    }
+};
+
+
+//Method 2 : without using extra memory
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        int h = matrix.size();
+        if (h == 0) {
+            return vector<int>();
+        }
+        int w = matrix[0].size();
+        
+        int rowBegin = 0;
+        int rowEnd = h - 1;
+        int colBegin = 0;
+        int colEnd = w - 1;
+        vector<int> ans;
+        
+        while (rowBegin <= rowEnd && colBegin <= colEnd) {
+            for (int i = colBegin; i <= colEnd;i++) {
+                ans.push_back(matrix[rowBegin][i]);
+            }
+            rowBegin++;
+            
+            for (int i = rowBegin; i <= rowEnd; i++) {
+                ans.push_back(matrix[i][colEnd]);
+            }
+            colEnd--;
+            
+            if (rowBegin <= rowEnd) {
+                for (int i = colEnd; i >= colBegin; i--) {
+                    ans.push_back(matrix[rowEnd][i]);
+                }
+                rowEnd--;
+            }
+            
+            
+            if (colBegin <= colEnd) {
+                for (int i = rowEnd; i >= rowBegin; i--) {
+                    ans.push_back(matrix[i][colBegin]);
+                }
+                colBegin++;
+            }
+            
+        }
+        
+        return ans;
+    }
+};
