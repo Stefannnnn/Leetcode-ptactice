@@ -1,0 +1,50 @@
+class Solution {
+public:
+    vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {
+        if(n < 2){
+            return vector<vector<int>>();
+        }
+        
+        //create a graph, represent a node's adjacency nodes
+        vector<vector<int>> graph(n,vector<int>());
+        int nodeNum = connections.size();
+        for (int i = 0; i < nodeNum; i++) {
+            graph[connections[i][0]].push_back(connections[i][1]);
+            graph[connections[i][1]].push_back(connections[i][0]);
+        }
+        
+        vector<int> parent(n,-1);
+        vector<int> minChild(n,-1);
+        DFS(graph,parent,minChild,0);
+        
+        vector<vector<int>> ans;
+        for (int i = 1; i < n; i++) {
+            if (i <= minChild[i]) {
+                vector<int> temp;
+                temp.push_back(parent[i]);
+                temp.push_back(i);
+                ans.push_back(temp);
+            }
+        }
+        
+        return ans;
+    }
+    
+    int DFS (vector<vector<int>> &graph, vector<int> &parent, vector<int> &minChild, int currentNode) {
+        if (minChild[currentNode] != -1) {  //if the node has been updated, return 
+            return minChild[currentNode];
+        }
+        
+        minChild[currentNode] = currentNode;
+        for (int &AdjacencyNode : graph[currentNode]) {
+            if (AdjacencyNode != parent[currentNode]) {  //if this node is not my parent
+                if (AdjacencyNode != 0 && parent[AdjacencyNode] == -1) { //if (1)not the node id=0 (2) haven't been signed parent
+                    parent[AdjacencyNode] = currentNode;
+                }
+                minChild[currentNode] = min(minChild[currentNode], DFS(graph,parent,minChild,AdjacencyNode));
+            }
+        }
+        return minChild[currentNode];
+    }
+
+};
