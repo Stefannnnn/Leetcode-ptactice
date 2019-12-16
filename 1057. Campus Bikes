@@ -1,3 +1,4 @@
+// Method 1:
 class Solution {
 public:
     vector<int> assignBikes(vector<vector<int>>& workers, vector<vector<int>>& bikes) {
@@ -22,6 +23,49 @@ public:
                 if (bikeVisited[info[d][j].second] == false && ans[info[d][j].first] == -1) {
                     bikeVisited[info[d][j].second] = true;
                     ans[info[d][j].first] = info[d][j].second;
+                }
+            }
+        }
+        
+        return ans;
+    }
+};
+
+
+
+//Method 2:
+// Can't use map<int,map<int,int>> -> the key is unique! will override...
+class Solution {
+public:
+    vector<int> assignBikes(vector<vector<int>>& workers, vector<vector<int>>& bikes) {
+        // distance : worker_id : bike_id
+        
+        int numWorkers = workers.size();
+        int numBikes = bikes.size();
+        if (numWorkers == 0){
+            return vector<int>();
+        }
+        
+        map<long,vector<pair<int,int>>> Map;
+        for (int i = 0; i < numWorkers; i++) {
+            for (int j = 0; j < numBikes; j++) {
+                int x = abs(workers[i][0] - bikes[j][0]);
+                int y = abs(workers[i][1] - bikes[j][1]);
+                long dis = x + y;
+                //cout << "dis:" << dis << ", i:" << i << ", j:" << j << endl;
+                Map[dis].push_back({i,j});
+            }
+        }
+        
+        vector<int> ans(numWorkers,-1);
+        unordered_set<int> Set;
+        for (map<long,vector<pair<int,int>>>::iterator iter = Map.begin(); iter != Map.end(); iter++) {
+            for (int i = 0; i < iter->second.size(); i++) {
+                if (ans[iter->second[i].first] == -1) {
+                    if (Set.count(iter->second[i].second) == 0) {
+                        ans[iter->second[i].first] = iter->second[i].second;
+                        Set.insert(iter->second[i].second);
+                    }
                 }
             }
         }
