@@ -14,3 +14,22 @@ public:
 
 
 // Method 2: binary search
+class Solution {
+public:
+    int searchInsert(vector<int>& nums, int target) {
+        int indexStart = 0;
+        int indexEnd = nums.size()-1;
+        
+        while (indexStart <= indexEnd) {
+            int indexMiddle = indexStart + (indexEnd - indexStart)/2;
+            if (target == nums[indexMiddle]) {
+                return indexMiddle;
+            } else if (target < nums[indexMiddle]) {
+                indexEnd = indexMiddle - 1;
+            } else {
+                indexStart = indexMiddle + 1;
+            }
+        }
+        return indexStart;
+    }
+};
