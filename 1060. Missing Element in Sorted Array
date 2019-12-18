@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int missingElement(vector<int>& nums, int k) {
+        int len = nums.size();
+        int indexStart = 0;
+        int indexEnd = len - 1;
+        int missNum = nums[indexEnd] - nums[indexStart] - indexEnd;
+        
+        if (k > missNum) {
+            return nums[indexEnd] + (k - missNum);
+        }
+        
+        while (indexStart < indexEnd - 1) {
+            int indexMid =  indexStart + (indexEnd - indexStart)/2;
+            int numDiff = nums[indexMid] - nums[indexStart];
+            missNum = numDiff - (indexMid - indexStart);
+            if (k <= missNum) {
+                indexEnd = indexMid;
+            } else if (k > missNum) {
+                indexStart = indexMid;
+                k -= missNum;
+            }
+        }
+        
+        return nums[indexStart] + k;
+    }
+};
