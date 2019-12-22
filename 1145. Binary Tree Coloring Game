@@ -1,0 +1,38 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool btreeGameWinningMove(TreeNode* root, int n, int x) {
+        if (n == 1) {
+            return false;
+        }
+        
+        int parent = countChildren(root,x);
+        int child1 = countChildren(xnode->left,-1);
+        int child2 = countChildren(xnode->right,-1);
+        int maxSum = max(parent,max(child1,child2));
+        
+        return maxSum > n - maxSum;
+    }
+    
+    
+private:
+    TreeNode* xnode;
+    int countChildren (TreeNode* root, int x) {
+        if (!root) {
+            return 0;
+        } else if (root->val == x) {
+            xnode = root;
+            return 0;
+        }
+        
+        return countChildren(root->left,x) + countChildren(root->right,x) + 1;
+    }
+};
