@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int maxSumTwoNoOverlap(vector<int>& A, int L, int M) {
+        int len = A.size();
+        vector<int> sum(len+1,0);
+        int count = 0;
+        for (int i = 0; i < len; i++) {
+            count += A[i];
+            sum[i] = count;
+        }
+        
+        int LMax = sum[L-1];
+        int MMax = sum[M-1];
+        int ans = sum[L + M - 1];
+        
+        for (int i = L + M; i < len; i++) {
+            LMax = max(LMax, sum[i - M] - sum[i - M - L]);
+            ans = max(ans, LMax + sum[i] - sum[i - M]);
+            
+            MMax = max(MMax, sum[i - L] - sum[i - L - M]);
+            ans = max(ans, MMax + sum[i] - sum[i - L]);
+        }
+        
+        return ans;
+    }
+};
