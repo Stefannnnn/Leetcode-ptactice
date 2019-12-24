@@ -1,3 +1,36 @@
+// Method 1: diff way to do the searching square
+class Solution {
+public:
+    int maxSideLength(vector<vector<int>>& mat, int threshold) {
+        int w = mat.size();
+        int h = mat[0].size();
+        
+        int dp[w+1][h+1];
+        memset(dp,0,sizeof(dp));
+        for (int i = 1; i <= w; i++) {
+            for (int j = 1; j <= h; j++) {
+                dp[i][j] = mat[i-1][j-1] + dp[i-1][j] + dp[i][j-1] - dp[i-1][j-1];
+            }
+        }
+        
+        int ans = 0;
+        for (int i = 1; i <= w; i++) {
+            for (int j = 1; j <= h; j++) {
+                int tempLen = ans + 1;
+                while (i - tempLen >= 0 && j - tempLen >= 0 && (dp[i][j] - dp[i][j-tempLen] - dp[i-tempLen][j] + dp[i-tempLen][j-tempLen]) <= threshold) {
+                    ans = tempLen;
+                    tempLen++;
+                }
+            }
+        }
+        
+        return ans;
+    }
+};
+
+
+
+// Method 2: diff way to do the searching square
 class Solution {
 public:
     int maxSideLength(vector<vector<int>>& mat, int threshold) {
