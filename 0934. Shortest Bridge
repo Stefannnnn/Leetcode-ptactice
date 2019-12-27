@@ -1,0 +1,93 @@
+class Solution {
+public:
+    int shortestBridge(vector<vector<int>>& A) {
+        int w = A.size();
+        int h = A[0].size();
+        
+        // First step, find the first '1', usc DFS to change all '1' connected with it to '-1'.
+        int count = 1;
+        for (int i = 0; i < w; i++) {
+            for (int j = 0; j < h; j++) {
+                if (A[i][j] == 0) {
+                    A[i][j] = INT_MAX;
+                } else if (A[i][j] == 1 && count == 1) {
+                    DFS_change1(A,i,j,w,h);
+                    count++;
+                } else if (A[i][j] == 1 && count == 2) {
+                    DFS_change2(A,i,j,w,h);
+                }
+            }
+        }
+        
+        
+        
+        // Second Step, find the second group of '1', usc BFS to find the cloest '-1'(let all '1' in second group do BFS)
+        int ans = INT_MAX;
+        for (int i = 0; i < w; i++) {
+            for (int j = 0; j < h; j++) {
+                if (A[i][j] == -1) {
+                    queue<pair<int,pair<int,int>>> Q;   // (step, x, y)
+                    Q.push({0,{i+1,j}});
+                    Q.push({0,{i-1,j}});
+                    Q.push({0,{i,j+1}});
+                    Q.push({0,{i,j-1}});
+                    while (!Q.empty()) {
+                        int round = Q.size();
+                        for (int i = 0; i < round; i++) {
+                            int step = Q.front().first;
+                            // if (step >= ans) {
+                            //     break;
+                            // }
+                            int x = Q.front().second.first;
+                            int y = Q.front().second.second;
+                            Q.pop();
+                            if (x >= 0 && x < w && y >= 0 && y < h) {
+                                if (A[x][y] != -1) {
+                                    if (A[x][y] == -2) {
+                                        ans = min(ans,step);
+                                    } else if (A[x][y] > step) {
+                                        A[x][y] = step;
+                                        Q.push({step+1,{x+1,y}});
+                                        Q.push({step+1,{x-1,y}});
+                                        Q.push({step+1,{x,y+1}});
+                                        Q.push({step+1,{x,y-1}});
+                                    }
+                                    
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return ans;
+    }
+    
+    void DFS_change1 (vector<vector<int>>& A, int x, int y, int w, int h) {
+        if (x < 0 || y < 0 || x >= w || y >= h || A[x][y] != 1) {
+            return;
+        }
+        
+        A[x][y] = -1;
+        DFS_change1(A,x-1,y,w,h);
+        DFS_change1(A,x+1,y,w,h);
+        DFS_change1(A,x,y+1,w,h);
+        DFS_change1(A,x,y-1,w,h);
+        return;
+    }
+    
+    void DFS_change2 (vector<vector<int>>& A, int x, int y, int w, int h) {
+        if (x < 0 || y < 0 || x >= w || y >= h || A[x][y] != 1) {
+            return;
+        }
+        
+        A[x][y] = -2;
+        DFS_change2(A,x-1,y,w,h);
+        DFS_change2(A,x+1,y,w,h);
+        DFS_change2(A,x,y+1,w,h);
+        DFS_change2(A,x,y-1,w,h);
+        return;
+    }
+    
+};
