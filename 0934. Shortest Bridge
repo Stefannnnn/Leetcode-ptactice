@@ -1,3 +1,59 @@
+// Method 1: find all point in island 1 and island 2, calculate the distance between them, find the shortest one(althogh
+some of the distance will not have a path between them, it is ok since it will not contain the shortest path) Time: O(a*b) 
+a:number of points in island 1. b: number of points in island 2
+
+
+class Solution {
+public:
+    int shortestBridge(vector<vector<int>>& A) {
+        int h = A.size();
+        int w = A[0].size();
+        
+        vector<pair<int,int>> firstIsland;
+        vector<pair<int,int>> secondIsland;
+        int flag = 1;
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
+                if (A[i][j] == 1 && flag == 1) {
+                    flag++;
+                    DFS(A,i,j,h,w,-1,firstIsland);
+                } else if (A[i][j] == 1 && flag == 2) {
+                    DFS(A,i,j,h,w,-1,secondIsland);
+                } 
+            }
+        }
+        
+        int ans = INT_MAX;
+        int numI1 = firstIsland.size();
+        int numI2 = secondIsland.size();
+        for (int i = 0; i < numI1; i++) {
+            for (int j = 0; j < numI2; j++) {
+                int temp = abs(firstIsland[i].first - secondIsland[j].first) + abs(firstIsland[i].second - secondIsland[j].second) - 1;
+                ans = min(ans,temp);
+            }
+        }
+        
+        return ans;
+    }
+    
+    void DFS (vector<vector<int>>& A, int i, int j, int h, int w, int value, vector<pair<int,int>> &Island) {
+        if (i >= 0 && i < w && j >= 0 && j < w && A[i][j] == 1) {
+            Island.push_back({i,j});
+            A[i][j] = value;
+            DFS(A,i-1,j,h,w,value,Island);
+            DFS(A,i+1,j,h,w,value,Island);
+            DFS(A,i,j-1,h,w,value,Island);
+            DFS(A,i,j+1,h,w,value,Island);
+        }
+    }
+    
+};
+
+
+
+
+
+// Method 2: Use DFS to find two islands; use BFS to find the distance -> slow: O(m*m*n*n)
 class Solution {
 public:
     int shortestBridge(vector<vector<int>>& A) {
