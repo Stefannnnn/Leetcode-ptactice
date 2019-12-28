@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int numMatchingSubseq(string S, vector<string>& words) {
+        int sLen = S.length();
+        unordered_map<char,vector<int>> Map;
+        for (int i = 0; i < sLen; i++) {
+            Map[S[i]].push_back(i);
+        }
+        
+        int count = 0;
+        int numWords = words.size();
+        for (int i = 0 ; i < numWords; i++) {
+            int curIndex = -1;
+            vector<int>::iterator iter;
+            int wordLen = words[i].length();
+            bool flag = true;
+            for (int j = 0; j < wordLen; j++) {
+                iter = upper_bound(Map[words[i][j]].begin(), Map[words[i][j]].end(), curIndex);
+                if (iter == Map[words[i][j]].end()) {
+                    flag = false;
+                    break;
+                }
+                curIndex = *iter;
+            }
+            if (flag) {
+                count++;
+            }
+        }
+        
+        return count;
+    }
+};
