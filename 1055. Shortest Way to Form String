@@ -1,1 +1,28 @@
-w
+class Solution {
+public:
+    int shortestWay(string source, string target) {
+        int sLen = source.length();
+        unordered_map<char,vector<int>> Map;
+        for (int i = 0; i < sLen; i++) {
+            Map[source[i]].push_back(i);
+        }
+        
+        int ans = 1;
+        int curIndex = -1;
+        vector<int>::iterator iter;
+        for (char n:target) {
+            if (Map.count(n) == 0) {
+                return -1;
+            }
+            iter = upper_bound(Map[n].begin(), Map[n].end(), curIndex);
+            if (iter == Map[n].end()) {
+                ans++;
+                curIndex = -1;
+                iter = upper_bound(Map[n].begin(), Map[n].end(), curIndex);
+            } 
+            curIndex = *iter;
+        }
+        
+        return ans;
+    }
+};
