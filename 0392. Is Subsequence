@@ -1,3 +1,36 @@
+// Method 1: Use map to store each character's index(might have several, so use vector<int> to store)
+//           set a curIndex to track the index in t, if there ever has that curIndex is bigger than all 
+//           index in a character, return false.
+             
+             
+class Solution {
+public:
+    bool isSubsequence(string s, string t) {
+        int tLen = t.length();
+        int sLen = s.length();
+        unordered_map<char,vector<int>> Map;                            // t: 0, 3, 4
+        for (int i = 0; i < tLen; i++) {                                // s: 1, 2
+            Map[t[i]].push_back(i+1);                                   // q: 3
+        }
+        
+        int curIndex = 0;
+        vector<int>:: iterator iter;
+        for (int i = 0; i < sLen; i++) {
+            iter = upper_bound(Map[s[i]].begin(), Map[s[i]].end(), curIndex);
+            if (iter == Map[s[i]].end()) {
+                return false;
+            }
+            curIndex = *iter;
+        }
+        return true;
+    }
+};
+
+
+
+
+
+// Method 2: traverse
 class Solution {
 public:
     bool isSubsequence(string s, string t) {
