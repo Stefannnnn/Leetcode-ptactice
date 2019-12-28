@@ -1,6 +1,3 @@
-// Easy-version question: 392
-
-
 class Solution {
 public:
     int numMatchingSubseq(string S, vector<string>& words) {
@@ -12,14 +9,14 @@ public:
         
         int count = 0;
         int numWords = words.size();
-        for (int i = 0 ; i < numWords; i++) {
+        for (string word:words) {
             int curIndex = -1;
             vector<int>::iterator iter;
-            int wordLen = words[i].length();
+            int wordLen = word.length();
             bool flag = true;
-            for (int j = 0; j < wordLen; j++) {
-                iter = upper_bound(Map[words[i][j]].begin(), Map[words[i][j]].end(), curIndex);
-                if (iter == Map[words[i][j]].end()) {
+            for (char c:word) {
+                iter = upper_bound(Map[c].begin(), Map[c].end(), curIndex);
+                if (iter == Map[c].end()) {
                     flag = false;
                     break;
                 }
