@@ -1,3 +1,5 @@
+// Follow-up question: 792
+
 // Method 1: Use map to store each character's index(might have several, so use vector<int> to store)
 //           set a curIndex to track the index in t, if there ever has that curIndex is bigger than all 
 //           index in a character, return false.
