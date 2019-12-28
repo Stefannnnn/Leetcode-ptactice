@@ -1,3 +1,35 @@
+// Method 2: vector -> faster
+class Solution {
+public:
+    int shortestWay(string source, string target) {
+        int sLen = source.length();
+        vector<vector<int>> Map(26,vector<int>());
+        for (int i = 0; i < sLen; i++) {
+            Map[source[i]-'a'].push_back(i);
+        }
+        
+        int ans = 1;
+        int curIndex = -1;
+        vector<int>::iterator iter;
+        for (char n:target) {
+            if (Map[n-'a'].size() == 0) {
+                return -1;
+            }
+            iter = upper_bound(Map[n-'a'].begin(), Map[n-'a'].end(), curIndex);
+            if (iter == Map[n-'a'].end()) {
+                ans++;
+                curIndex = -1;
+                iter = upper_bound(Map[n-'a'].begin(), Map[n-'a'].end(), curIndex);
+            } 
+            curIndex = *iter;
+        }
+        
+        return ans;
+    }
+};
+
+
+// Method 2: map -> slower
 class Solution {
 public:
     int shortestWay(string source, string target) {
