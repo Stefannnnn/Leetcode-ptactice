@@ -1,0 +1,29 @@
+class Solution {
+public:
+    vector<int> plusOne(vector<int>& digits) {
+        int len = digits.size();
+        
+        int overflow = 0;
+        // plus one
+        digits[len-1]++;
+        vector<int> ans;
+        for (int i = len-1; i >= 0; i--) {
+            int temp = digits[i]+overflow;
+            if (temp > 9) {
+                temp -= 10;
+                overflow = 1;
+            } else {
+                overflow = 0;
+            }
+            ans.push_back(temp);
+        }
+        
+        if (overflow == 1) {
+            ans.push_back(1);
+        }
+        
+        reverse(ans.begin(), ans.end());
+        
+        return ans;
+    }
+};
