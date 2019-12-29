@@ -1,0 +1,39 @@
+class Solution {
+public:
+    bool isLongPressedName(string name, string typed) {
+        int nameLen = name.length();
+        int typedLen = typed.length();
+        
+        int nameIndex = 0;
+        int typedIndex = 0;
+        
+        while (nameIndex < nameLen) {
+            char tempName = name[nameIndex];
+            char tempTyped = typed[typedIndex];
+            if (tempName != tempTyped) {
+                return false;
+            }
+            
+            // Check the name and the typed
+            while (typedIndex < typedLen && nameIndex < nameLen && name[nameIndex] == tempName) {
+                if (typed[typedIndex] != tempTyped) {
+                    return false;
+                }
+                
+                typedIndex++;
+                nameIndex++;
+            }
+            // Let typed go to the next char
+            while (typedIndex < typedLen && typed[typedIndex] == tempTyped) {
+                typedIndex++;
+            }
+            
+            if (typedIndex >= typedLen) {
+                break;
+            }
+        }
+        
+        
+        return nameIndex == nameLen && typedIndex == typedLen;
+    }
+};
