@@ -1,0 +1,34 @@
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int len = s.length();
+        if (len <= 1) {
+            return len;
+        }
+        unordered_set<char> Set;
+        Set.insert(s[0]);
+        
+        int ans = 1;
+        int leftPointer = 0;
+        int rightPointer = 0;
+        for (int i = 1; i < len; i++) {
+            rightPointer = i;
+            if (Set.count(s[rightPointer]) == 0) {
+                Set.insert(s[rightPointer]);
+                int setSize = Set.size();
+                ans = max(ans,setSize);
+            } else {
+                // delete the char from leftPointer, until it meet the same char
+                while (s[leftPointer] != s[rightPointer]) {
+                    Set.erase(s[leftPointer]);
+                    leftPointer++;
+                }
+                leftPointer++;
+                // int setSize = Set.size();
+                ans = max(ans,rightPointer-leftPointer+1);
+            }
+        }
+        
+        return ans;
+    }
+};
