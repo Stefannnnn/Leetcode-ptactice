@@ -1,4 +1,38 @@
-// Method 1: use fast and slow pointer
+// Method 1: reverse the link-list, if the new_head = head ->there must have cycle.
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        // Reverse the linked-list, if the new head == head, then this linked-list has cycle
+        if (!head || !head->next) {
+            return false;
+        }
+        
+        ListNode *prev = NULL;
+        ListNode *follow = NULL;
+        ListNode *newHead = head;
+        while (newHead) {
+            follow = newHead->next;
+            newHead->next = prev;
+            prev = newHead;
+            newHead = follow;
+        }
+        
+        return prev == head ? true : false;
+    }
+};
+
+
+
+
+// Method 2: use fast and slow pointer
 /**
  * Definition for singly-linked list.
  * struct ListNode {
@@ -39,37 +73,6 @@ public:
 
 
 
-
-// Method 2: reverse the link-list, if the new_head = head ->there must have cycle.
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
- * };
- */
-class Solution {
-public:
-    bool hasCycle(ListNode *head) {
-        // Reverse the linked-list, if the new head == head, then this linked-list has cycle
-        if (!head || !head->next) {
-            return false;
-        }
-        
-        ListNode *prev = NULL;
-        ListNode *follow = NULL;
-        ListNode *newHead = head;
-        while (newHead) {
-            follow = newHead->next;
-            newHead->next = prev;
-            prev = newHead;
-            newHead = follow;
-        }
-        
-        return prev == head ? true : false;
-    }
-};
 
 
 
