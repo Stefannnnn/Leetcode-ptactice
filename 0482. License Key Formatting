@@ -1,0 +1,36 @@
+class Solution {
+public:
+    string licenseKeyFormatting(string S, int K) {
+        int SIndex = S.length()-1;
+        string ans;
+        
+        int count = K;
+        while (SIndex >= 0) {
+            if (S[SIndex] == '-') {
+                SIndex--;
+            } else {
+                if (count == 0) {
+                    ans += '-';
+                    count = K;
+                } else {
+                    char temp = S[SIndex];
+                    // number -> upper case -> lower case
+                    if (temp > 'Z') {
+                        temp = temp - ('a' - 'A');
+                    }
+                    ans += temp;
+                    count--;
+                    SIndex--;
+                }
+            }
+            
+        }
+        
+        if (ans[ans.length()-1] == '-') {
+            ans.erase(ans.end()-1);
+        }
+        reverse(ans.begin(),ans.end());
+        
+        return ans;
+    }
+};
