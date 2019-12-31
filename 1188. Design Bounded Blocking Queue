@@ -1,0 +1,33 @@
+// Slow version: 635ms
+class BoundedBlockingQueue {
+public:
+    int bound = 0;
+    int curCap = 0;
+    vector<int> Q;
+    
+    BoundedBlockingQueue(int capacity) {
+        bound = capacity;
+    }
+    
+    void enqueue(int element) {
+        while (curCap >= bound) {
+            
+        }
+        curCap++;
+        Q.push_back(element);
+    }
+    
+    int dequeue() {
+        while (curCap <= 0) {
+            
+        }
+        curCap--;
+        int ans = Q[0];
+        Q.erase(Q.begin());
+        return ans;
+    }
+    
+    int size() {
+        return curCap;
+    }
+};
