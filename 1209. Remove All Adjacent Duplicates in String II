@@ -17,7 +17,7 @@ public:
             if (Stack.top().second == k) {
                 Stack.pop();
             }
-        }  
+        }   
         
         string ans = "";
         while (!Stack.empty()) {
