@@ -1,3 +1,7 @@
+// easier level: 141
+// medium level: 287
+
+
 /**
  * Definition for singly-linked list.
  * struct ListNode {
