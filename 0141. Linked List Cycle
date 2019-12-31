@@ -1,3 +1,7 @@
+// medium level: 142
+// medium level: 287
+
+
 // Method 1: reverse the link-list, if the new_head = head ->there must have cycle.
 /**
  * Definition for singly-linked list.
