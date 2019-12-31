@@ -37,7 +37,7 @@ public:
                 x -= dir[dirIndex][0];
                 y -= dir[dirIndex][1];
                 dirIndex++;
-                if (dirIndex == 4) {
+                if (dirIndex == 4) { 
                     dirIndex = 0;
                 }
                 x += dir[dirIndex][0];
