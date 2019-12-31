@@ -37,7 +37,7 @@ public:
         if (board[x][y] == 'O') {
             board[x][y] = '1';
             if (x - 1 >= 0) {
-                DFS(board,x-1,y);
+                DFS(board,x-1,y); 
             }
             if (x + 1 < board.size()) {
                 DFS(board,x+1,y);
