@@ -1,4 +1,41 @@
-// Slow version: 635ms
+// use map: 584ms
+class BoundedBlockingQueue {
+public:
+    int bound = 0;
+    int curCap = 0;
+    map<int,int> Q;
+    map<int,int>::iterator iter;
+    
+    BoundedBlockingQueue(int capacity) {
+        bound = capacity;
+    }
+    
+    void enqueue(int element) {
+        while (curCap >= bound) {
+            
+        }
+        Q[curCap++] = element;
+    }
+    
+    int dequeue() {
+        while (curCap <= 0) {
+            
+        }
+        curCap--;
+        iter = Q.begin();
+        int ans = iter->second;
+        Q.erase(iter);
+        return ans;
+    }
+    
+    int size() {
+        return curCap;
+    }
+};
+
+
+
+// use vector: 635ms
 class BoundedBlockingQueue {
 public:
     int bound = 0;
