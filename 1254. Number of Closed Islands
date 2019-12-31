@@ -37,7 +37,7 @@ public:
                     DFS(grid,i,j,h,w);
                     count++;
                 }
-            }
+            } 
         }
         
         return count;
