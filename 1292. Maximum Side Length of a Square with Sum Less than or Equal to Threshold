@@ -36,7 +36,7 @@ public:
     int maxSideLength(vector<vector<int>>& mat, int threshold) {
         int w = mat.size();
         int h = mat[0].size();
-        
+         
         int dp[w+1][h+1];
         memset(dp,0,sizeof(dp));
         for (int i = 1; i <= w; i++) {
