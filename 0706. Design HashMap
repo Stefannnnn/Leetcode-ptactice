@@ -1,4 +1,6 @@
 // Method 1: faster: 86%
+// use % 10000 to push all element into 10000 buckets. and search
+
 class MyHashMap {
 private:
     vector<list<pair<int,int>>> hash;
