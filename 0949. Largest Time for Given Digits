@@ -1,0 +1,38 @@
+// Know the new function: next_permutation()
+class Solution {
+public:
+    string largestTimeFromDigits(vector<int>& A) {
+        // test all results
+        string ans;
+        int ans_hour = -1;
+        int ans_min = -1;
+        sort(A.begin(),A.end());
+        do {
+            int cur_hour = A[0] * 10 + A[1];
+            int cur_min = A[2] * 10 + A[3];
+            if (cur_hour < 24 && cur_min < 60) {
+                if (ans_hour < cur_hour) {
+                    ans_hour = cur_hour;
+                    ans_min = cur_min;
+                } else if (ans_hour == cur_hour && ans_min < cur_min) {
+                    ans_min = cur_min;
+                }
+            }
+        } while (next_permutation(A.begin(),A.end()));
+        
+        if (ans_hour == -1) {
+            return ans;
+        }
+        string temp_hour  = to_string(ans_hour);
+        if (temp_hour.length() == 1) {
+            temp_hour = '0' + temp_hour;
+        }
+        string temp_min = to_string(ans_min);
+        if (temp_min.length() == 1) {
+            temp_min = '0' + temp_min;
+        }
+        ans = temp_hour + ":" + temp_min;
+        
+        return ans;
+    }
+};
