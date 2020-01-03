@@ -1,0 +1,29 @@
+class Solution {
+public:
+    vector<int> relativeSortArray(vector<int>& arr1, vector<int>& arr2) {
+        int len2 = arr2.size();
+        int len1 = arr1.size();
+        int curPointer = 0;
+        int firstPointer = 0;
+        for (int i = 0; i < len2; i++) {
+            curPointer = firstPointer;
+            while (curPointer < len1) {
+                while (curPointer < len1 && arr1[curPointer] != arr2[i]) {
+                    curPointer++;
+                }
+                if (curPointer < len1 && arr1[curPointer] == arr2[i]) {
+                    int temp = arr1[firstPointer];
+                    arr1[firstPointer] = arr1[curPointer];
+                    arr1[curPointer] = temp;
+                    firstPointer++;
+                    curPointer++;
+                }
+            }
+        }
+        sort(arr1.begin()+firstPointer,arr1.end());
+        
+        
+        
+        return arr1;
+    }
+};
