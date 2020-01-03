@@ -1,3 +1,32 @@
+// Method 1: cleaner
+class Solution {
+public:
+    vector<int> relativeSortArray(vector<int>& arr1, vector<int>& arr2) {
+        int len2 = arr2.size();
+        int len1 = arr1.size();
+        vector<int> cnt(1001,0);
+        for (int &n : arr1) {
+            cnt[n]++;
+        }
+        
+        int curPointer = 0;
+        for (int &n : arr2) {
+            while (cnt[n]-- > 0) {
+                arr1[curPointer++] = n;
+            }
+        }
+        
+        for (int i = 0; i < 1001; i++) {
+            while (cnt[i]-- > 0) {
+                arr1[curPointer++] = i;
+            }
+        }
+        
+        return arr1;
+    }
+};
+
+// Method 2: original method
 class Solution {
 public:
     vector<int> relativeSortArray(vector<int>& arr1, vector<int>& arr2) {
