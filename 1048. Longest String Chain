@@ -1,0 +1,48 @@
+class Solution {
+public:
+    int longestStrChain(vector<string>& words) {
+        vector<vector<string>> dictionary(16,vector<string>());  // len, vector<string>
+        int len = words.size();
+        for (int i = 0; i < len; i++) {
+            dictionary[words[i].length()-1].push_back(words[i]);
+        }
+        
+        unordered_map<string,int> Map;  // word, current len
+        int tempLen = dictionary[0].size();
+        for (int i = 0; i < len; i++) {
+            Map[words[i]] = 1;
+        }
+        
+        
+        int ans = 1;
+        int l1 = dictionary.size();
+        for (int i = 0; i < l1-1; i++) {
+            int l2 = dictionary[i].size();
+            for (int j = 0; j < l2; j++) {
+                int l3 = dictionary[i+1].size();
+                for (int k = 0; k < l3; k++) {
+                    if (check(dictionary[i][j],dictionary[i+1][k])) {
+                        Map[dictionary[i+1][k]] = max(Map[dictionary[i+1][k]],Map[dictionary[i][j]] + 1);
+                        ans = max(ans,Map[dictionary[i+1][k]]);
+                    }
+                }
+            }
+        }
+            
+        return ans;
+        
+        
+    }
+    
+    bool check (string &A, string &B) {
+        int lenB = B.length();
+        int flag = 0;
+        for (int i = 0; i < lenB; i++) {
+            if (B[i] == A[flag]) {
+                flag++;
+            }
+        }
+        
+        return flag == A.length();
+    }
+};
