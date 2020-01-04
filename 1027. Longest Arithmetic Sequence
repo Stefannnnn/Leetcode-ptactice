@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int longestArithSeqLength(vector<int>& A) {
+        int len = A.size();
+        vector<unordered_map<int,int>> Map(len,unordered_map<int,int>());
+        unordered_map<int,int>::iterator iter;
+        int ans = 0;
+        for (int i = 1; i < len; i++) {
+            for (int j = 0; j < i; j++) {
+                int diff = A[i] - A[j];
+                iter = Map[j].find(diff);
+                if (iter == Map[j].end()) {
+                    Map[i][diff] = 2;
+                    ans = max(ans,2);
+                } else {
+                    Map[i][diff] = Map[j][diff] + 1;
+                    ans = max(ans,Map[i][diff]);
+                }
+            }
+        }
+        return ans;
+    }
+};
