@@ -1,0 +1,32 @@
+class Solution {
+private:
+    void check (vector<int>& A, vector<int>& B,vector<vector<int>>& ans) {
+        int big = max(A[0],B[0]);
+        int small = min(A[1],B[1]);
+        if (small >= big) {
+            ans.push_back({big,small});
+        } 
+        return;
+    }
+    
+public:
+    vector<vector<int>> intervalIntersection(vector<vector<int>>& A, vector<vector<int>>& B) {
+        vector<vector<int>> ans;
+        int AP = 0;
+        int BP = 0;
+        int Alen = A.size();
+        int Blen = B.size();
+        while (AP < Alen && BP < Blen) {
+            check(A[AP],B[BP],ans);
+            if (A[AP][1] < B[BP][1]) {
+                AP++;
+            } else if (B[BP][1] < A[AP][1]) {
+                BP++;
+            } else if (B[BP][1] == A[AP][1]) {
+                BP++;
+                AP++;
+            }
+        }
+        return ans;
+    }
+};
