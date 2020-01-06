@@ -1,3 +1,59 @@
+// Method 2: fast 86%
+class Solution {
+public:
+    vector<int> numSmallerByFrequency(vector<string>& queries, vector<string>& words) {
+        int qLen = queries.size();
+        int wLen = words.size();
+        vector<int> wordCount(12,0);    // how many words when the number is ith
+        vector<int> ans(qLen,0);
+        for (string &s : words) {
+            int curNum = 0;
+            sort(s.begin(),s.end());
+            char tempW = s[0];
+            if (s.length() == 1) {
+                curNum = 1;
+            } else {
+                int pointer = 1;
+                while (s[pointer] == tempW) {
+                    pointer++;
+                }
+                curNum = pointer;
+            }
+            wordCount[curNum]++;
+        }
+        
+        
+        // Build the wordCount correctly
+        for (int i = 10; i >= 0; i--) {
+            wordCount[i] = wordCount[i] + wordCount[i+1];
+        }
+        
+        for (int i = 0; i < 12; i++) {
+            cout << wordCount[i] << " ";
+        }
+            
+        // For queries
+        for (int i = 0; i < qLen; i++) {
+            sort(queries[i].begin(),queries[i].end());
+            char tempW = queries[i][0];
+            if (queries[i].length() == 1) {
+                ans[i] = wordCount[2];
+            } else {
+                int pointer = 1;
+                while (queries[i][pointer] == tempW) {
+                    pointer++;
+                }
+                ans[i] = wordCount[pointer+1];
+            }
+        }
+        return ans;
+    }
+};
+
+
+
+
+// Method 2: slower 20%
 class Solution {
 private:
     void cal (vector<string>& input, vector<int>& output) {
