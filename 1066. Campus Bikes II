@@ -1,4 +1,4 @@
-// Method 2: fast DP
+// Method 1: fast DP
 // Reference: https://leetcode.com/problems/campus-bikes-ii/discuss/360037/Step-by-Step-solution-from-400ms-to-1ms-(beating-100)
 class Solution {
 private:
