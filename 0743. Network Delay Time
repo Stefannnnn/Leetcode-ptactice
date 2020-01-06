@@ -1,5 +1,41 @@
 // Method 1: diagistra 84%
-
+class Solution {
+public:
+    int networkDelayTime(vector<vector<int>>& times, int N, int K) {
+        unordered_map<int, vector<pair<int,int>>> Map;  // u, v, w
+        int len = times.size();
+        for (int i = 0; i < len; i++) {
+            Map[times[i][0]].push_back({times[i][1],times[i][2]});
+        }
+        priority_queue<pair<int,int>> group;    // len, v
+        
+        int tempLen = Map[K].size();
+        for (int i = 0; i < tempLen; i++) {
+            group.push({-Map[K][i].second,Map[K][i].first});
+        }
+        int ans = 0;
+        vector<bool> curVal(len+1,false);
+        curVal[K] = true;
+        N--;
+        while (!group.empty()) {
+            int u = group.top().second;
+            int curLen = -group.top().first;
+            group.pop();
+            if (curVal[u] == false) {
+                curVal[u] = true;
+                N--;
+                ans = max(ans,curLen);
+                tempLen = Map[u].size();
+                for (int i = 0; i < tempLen; i++) {
+                    if (Map.count(u) > 0) {
+                        group.push({-Map[u][i].second-curLen,Map[u][i].first});
+                    }
+                }
+            }
+        }
+        return N == 0 ? ans : -1;
+    }
+};
 
 
 
