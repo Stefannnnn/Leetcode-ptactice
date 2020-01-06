@@ -1,0 +1,40 @@
+// Method 1: diagistra 84%
+
+
+
+
+
+// Method 2: BFS 76%
+class Solution {
+public:
+    int networkDelayTime(vector<vector<int>>& times, int N, int K) {
+        unordered_map<int, vector<pair<int,int>>> Map;
+        vector<int> curVal(N+1,INT_MAX);
+        curVal[K] = 0;
+        int len = times.size();
+        for (int i = 0; i < len; i++) {
+            Map[times[i][0]].push_back({times[i][1],times[i][2]});
+        }
+        queue<pair<int,int>> Q;
+        Q.push({K,0});
+        while (!Q.empty()) {
+            int u = Q.front().first;
+            int tempVal = Q.front().second;
+            Q.pop();
+            vector<pair<int,int>> tempChild = Map[u];
+            int len1 = tempChild.size();
+            for (int i = 0; i < len1; i++) {
+                if ((tempChild[i].second+tempVal) < curVal[tempChild[i].first]) {
+                    curVal[tempChild[i].first] = tempChild[i].second+tempVal;
+                    Q.push({tempChild[i].first,curVal[tempChild[i].first]});
+                }
+            }
+        }
+        
+        int ans = 0;
+        for (int i = 1; i < N+1; i++) {
+            ans = max(ans,curVal[i]);
+        }
+        return ans == INT_MAX ? -1:ans;
+    }
+};
