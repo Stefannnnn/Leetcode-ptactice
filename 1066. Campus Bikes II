@@ -1,0 +1,46 @@
+// Method 2: fast DP
+// Reference: https://leetcode.com/problems/campus-bikes-ii/discuss/360037/Step-by-Step-solution-from-400ms-to-1ms-(beating-100)
+
+
+
+
+
+
+// Method 2: DFS, too slow : TLE
+class Solution {
+private:
+    int ans = INT_MAX;
+    
+    void DFS (vector<vector<int>>& workers, int wIndex, vector<vector<int>>& bikes, vector<bool> visited, int curDis) {
+        if (wIndex >= workers.size()) {
+            ans = min(ans,curDis);
+            return;
+        }
+        if (curDis > ans) {
+            return;
+        }
+        
+        int bLen = bikes.size();
+        for (int i = 0; i < bLen; i++) {
+            if (visited[i] == false) {
+                visited[i] = true;
+                DFS(workers,wIndex+1,bikes,visited,curDis+dis(workers[wIndex],bikes[i]));
+                visited[i] = false;
+            }
+        }
+        return;
+    }
+    
+    int dis (vector<int>& workers, vector<int>& bikes) {
+        return abs(workers[0] - bikes[0]) + abs(workers[1] - bikes[1]);
+    }
+    
+public:
+    int assignBikes(vector<vector<int>>& workers, vector<vector<int>>& bikes) {
+        int wLen = workers.size();
+        int bLen = bikes.size();
+        vector<bool> visited(bLen,false);
+        DFS(workers,0,bikes,visited,0);
+        return ans;
+    }
+};
