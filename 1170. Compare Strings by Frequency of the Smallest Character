@@ -1,0 +1,44 @@
+class Solution {
+private:
+    void cal (vector<string>& input, vector<int>& output) {
+        int len = input.size();
+        for (int i = 0; i < len; i++) {
+            sort(input[i].begin(),input[i].end());
+            int tempCh = input[i][0];
+            int len = input[i].length();
+            if (len == 1) {
+                output[i] = 1;
+            } else {
+                int pointer = 1;
+                while (pointer < len && input[i][pointer] == tempCh) {
+                    pointer++;
+                }
+                output[i] = pointer;
+            }
+        }
+    }
+    
+public:
+    vector<int> numSmallerByFrequency(vector<string>& queries, vector<string>& words) {
+        int qLen = queries.size();
+        int wLen = words.size();
+        vector<int> ans(qLen,0);
+        vector<int> calq(qLen,0);
+        vector<int> calw(wLen,0);
+        
+        cal(queries,calq);
+        cal(words,calw);
+        
+        for (int i = 0; i < qLen; i++) {
+            int count = 0;
+            for (int j = 0; j < wLen; j++) {
+                if (calw[j] > calq[i]) {
+                    count++;
+                }
+            }
+            ans[i] = count;
+        }
+        
+        return ans;
+    }
+};
