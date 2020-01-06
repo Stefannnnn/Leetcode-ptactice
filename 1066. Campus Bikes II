@@ -1,6 +1,54 @@
 // Method 2: fast DP
 // Reference: https://leetcode.com/problems/campus-bikes-ii/discuss/360037/Step-by-Step-solution-from-400ms-to-1ms-(beating-100)
+class Solution {
+private:
+    unordered_map<int,int> Map;  // status, len   -> status: w1b3 + w3b4.... 
+    
+    int DFS (vector<vector<int>>& workers, int wIndex, vector<vector<int>>& bikes, vector<bool> visited) {
+        if (wIndex >= workers.size()) {
+            return 0;
+        }
+        int key = createKey(visited);
+        if (Map.count(key) > 0) {
+            return Map[key];
+        } 
+        int partMinDis = INT_MAX;
+        int bLen = bikes.size();
+        for (int i = 0; i < bLen; i++) {
+            if (visited[i] == false) {
+                visited[i] = true;
+                int temp = dis(workers[wIndex], bikes[i]) + DFS(workers, wIndex+1, bikes, visited);
+                partMinDis = min(partMinDis,temp);
+                visited[i] = false;
+            }
+        }
+        Map[key] = partMinDis;
+        return partMinDis;
+    }
+    
+    int createKey (vector<bool> visited) {
+        int len = visited.size();
+        int key = 0;
+        for (int i = 0; i < len; i++) {
+            if (visited[i] == false) {
+                key |= 1 << i;
+            }
+        }
+        return key;
+    }
 
+    int dis (vector<int>& workers, vector<int>& bikes) {
+        return abs(workers[0] - bikes[0]) + abs(workers[1] - bikes[1]);
+    }
+    
+public:
+    int assignBikes(vector<vector<int>>& workers, vector<vector<int>>& bikes) {
+        int wLen = workers.size();
+        int bLen = bikes.size();
+        vector<bool> visited(bLen,false);
+        return DFS(workers,0,bikes,visited);
+    }
+};
 
 
 
