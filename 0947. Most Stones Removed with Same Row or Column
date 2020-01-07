@@ -1,0 +1,47 @@
+// Reference: https://www.jianshu.com/p/30d2058db7f7
+// Method 2:
+class Solution {
+private:
+    unordered_map<int,vector<int>> yMap;
+    unordered_map<int,vector<int>> xMap;
+    int ans;
+    
+    void helper (vector<int>& vec, vector<bool>& visited, vector<vector<int>>& stones) {
+        for (int& i : vec) {
+            if (!visited[i]) {
+                visited[i] = true;
+                ans++;
+                vector<int> xvec = xMap[stones[i][0]];
+                vector<int> yvec = yMap[stones[i][1]];
+                helper(xvec,visited,stones);
+                helper(yvec,visited,stones);
+            }
+        }
+    }
+    
+public:
+    int removeStones(vector<vector<int>>& stones) {
+        int len = stones.size();
+        if (len == 0) {
+            return 0;
+        }
+        ans = 0;
+        for (int i = 0; i < len; i++) {
+            xMap[stones[i][0]].push_back(i);
+            yMap[stones[i][1]].push_back(i);
+        }
+        vector<bool> visited(len,false);
+        
+        for (int i = 0; i < len; i++) {
+            if (!visited[i]) {
+                visited[i] = true;
+                vector<int> xvec = xMap[stones[i][0]];
+                vector<int> yvec = yMap[stones[i][1]];
+                helper(xvec,visited,stones);
+                helper(yvec,visited,stones);
+            }
+        }
+        
+        return ans;
+    }
+};
