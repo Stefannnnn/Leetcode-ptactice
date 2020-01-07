@@ -1,0 +1,83 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+private:
+    void swap (TreeNode* &root) {
+        TreeNode* left = root->left;
+        TreeNode* right = root->right;
+        root->left = right;
+        root->right = left;
+    }
+    
+    bool helper (TreeNode* root1, TreeNode* root2) {
+        if (!root1 && !root2) {
+            return true;
+        } else if (!root1 || !root2) {
+            return false;
+        }
+        
+        int count1 = 0;
+        int count2 = 0;
+        if (root1->left) {
+            count1++;
+        }
+        if (root1->right) {
+            count1++;
+        }
+        if (root2->left) {
+            count2++;
+        }
+        if (root2->right) {
+            count2++;
+        }
+        
+        if (count1 != count2) {
+            return false;
+        }
+        
+        if (count1 == 0) {
+            return true;
+        } else if (count1 == 1) {
+            TreeNode* temp1 = NULL;
+            TreeNode* temp2 = NULL;
+            if (root1->left) {
+                temp1 = root1->left;
+            } else {
+                temp1 = root1->right;
+            }
+            if (root2->left) {
+                temp2 = root2->left;
+            } else {
+                temp2 = root2->right;
+            }
+            
+            if (temp1->val != temp2->val) {
+                return false;
+            } else {
+                return helper(temp1,temp2);
+            }
+        } else if (count1 == 2) {
+            if ( (root1->left->val != root2->left->val) || (root1->right->val != root2->right->val) ) {
+                swap(root2);
+            }
+            if ( (root1->left->val != root2->left->val) || (root1->right->val != root2->right->val) ) {
+                return false;
+            } else {
+                return helper(root1->left,root2->left) && helper(root1->right,root2->right);
+            }
+        }
+        return false;
+    }    
+    
+public:
+    bool flipEquiv(TreeNode* root1, TreeNode* root2) {
+        return helper(root1,root2);
+    }
+};
