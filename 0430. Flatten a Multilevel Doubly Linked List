@@ -11,24 +11,22 @@ public:
 class Solution {
 private:
     stack<Node*> Stack;
-    Node* tempNode = NULL;
     
-    void helper (Node*& Cur) {
-        while (Cur->next || Cur->child) {
-            if (Cur->child) {   // has child
-                if (Cur->next) {
-                    Stack.push(Cur->next);
+    Node* helper (Node* curNode) {
+        Node* tempNode = NULL;
+        while (curNode) {
+            if (curNode->child) {
+                if (curNode->next) {
+                    Stack.push(curNode->next);
                 }
-                tempNode = Cur->child;
-                Cur->next = tempNode;
-                Cur->child = NULL;
-                tempNode->prev = Cur;
-                Cur = Cur->next;
-            } else {    //no child
-                Cur = Cur->next;
+                curNode->next = curNode->child;
+                curNode->child->prev = curNode;
+                curNode->child = NULL;
             }
+            tempNode = curNode;
+            curNode = curNode->next;
         }
-        
+        return tempNode;
     }
     
 public:
@@ -36,17 +34,19 @@ public:
         if (!head) {
             return head;
         }
+        Node* curNode = head;
+        Node* tempNode = NULL;
+        curNode = helper(curNode);
         
-        Node* Cur = head;
-        helper(Cur);
-        
+        // Deal with stack
         while (!Stack.empty()) {
             tempNode = Stack.top();
             Stack.pop();
-            Cur->next = tempNode;
-            tempNode->prev = Cur;
-            helper(Cur);
+            curNode->next = tempNode;
+            tempNode->prev = curNode;
+            curNode = helper(curNode);
         }
+        
         return head;
     }
 };
