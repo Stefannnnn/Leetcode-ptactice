@@ -1,0 +1,50 @@
+class Solution {
+public:
+    vector<int> findOrder(int numCourses, vector<pair<int, int>>& prerequisites) {
+        vector<int> ans;
+        //indegree:how many pre it has
+        vector<int> indegree(numCourses,0);
+        
+        for(int i=0;i<prerequisites.size();i++){
+            indegree[prerequisites[i].first]++;
+        }
+        
+        queue<int> Queue;
+        for(int i=0;i<numCourses;i++){
+            if(indegree[i] == 0){
+                ans.push_back(i);
+                Queue.push(i);
+            }
+        }
+        
+        while(!Queue.empty()){
+            int temp = Queue.front();
+            Queue.pop();
+            for(int i=0;i<prerequisites.size();i++){
+                if(temp == prerequisites[i].second){
+                    indegree[prerequisites[i].first]--;
+                    if(indegree[prerequisites[i].first] == 0){
+                        Queue.push(prerequisites[i].first);
+                        ans.push_back(prerequisites[i].first);
+                    }
+                    
+                }
+            }
+            
+        }
+        
+        for(auto n:indegree){
+            if(n != 0){
+                vector<int> a;
+                return a;
+            }
+        }
+        
+        return ans;
+        
+        
+        
+        
+        
+    }
+};
