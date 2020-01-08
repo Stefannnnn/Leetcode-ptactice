@@ -1,3 +1,4 @@
+// Method 1: faster 98%, but more complicated
 class Solution {
 public:
     int expressiveWords(string S, vector<string>& words) {
