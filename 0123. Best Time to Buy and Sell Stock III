@@ -1,0 +1,63 @@
+// Method 2: 
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int len = prices.size();
+        if (len < 2) {
+            return 0;
+        }
+        if (len == 2) {
+            return (prices[1] - prices[0]) > 0 ? (prices[1] - prices[0]): 0;
+        } else if (len == 3) {
+            int temp = prices[1] - prices[0];
+            temp = max(temp, prices[2] - prices[0]);
+            temp = max(temp, prices[2] - prices[1]);
+            return temp > 0 ? temp:0;
+        } 
+        
+        vector<vector<long>> table(4,vector<long>(len,INT_MIN));
+        // Initial
+        table[0][0] = -prices[0];
+        
+        
+        // Start : from top to down, from left to right
+        for (int i = 1; i < len; i++) {
+            table[0][i] = max(table[0][i-1],(long)-prices[i]);
+            table[1][i] = max(table[1][i-1],table[0][i]+prices[i]);
+            table[2][i] = max(table[2][i-1],table[1][i]-prices[i]);
+            table[3][i] = max(table[3][i-1],table[2][i]+prices[i]);
+        }
+        return (int)max((long)0, max(table[1][len-1],table[3][len-1]));
+    }
+};
+
+
+// Method 2: divide and conquer O(n*n)
+class Solution {
+private:
+    int helper (int i, int j, vector<int>& prices) {
+        int len = j-i+1;
+        int ans = INT_MIN;
+        int tempMin = prices[i];
+        for (int k = i+1; k <= j; k++) {
+            ans = max(ans,prices[k] - tempMin);
+            tempMin = min(tempMin,prices[k]);
+        }
+        return ans > 0 ? ans:0;
+    }    
+    
+public:
+    int maxProfit(vector<int>& prices) {
+        int len = prices.size();
+        if (len < 2) {
+            return 0;
+        }
+        int ans = helper(0,len-1,prices);
+        
+        for (int i = 1; i < len - 2; i++) {
+            ans = max(ans,helper(0,i,prices) + helper(i+1,len-1,prices)); 
+        }
+        
+        return ans;
+    }
+};
