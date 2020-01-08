@@ -1,0 +1,63 @@
+class Solution {
+public:
+    int expressiveWords(string S, vector<string>& words) {
+        int lenS = S.length();
+        int lenW = words.size();
+        if (lenS == 0 || lenW == 0) {
+            return 0;
+        }
+        
+        vector<pair<char,int>> Map;
+        char tempCh = S[0];
+        int count = 1;
+        int cur = 1;
+        while (cur < lenS) {
+            if (tempCh == S[cur]) {
+                count++;
+            } else {
+                Map.push_back({tempCh,count});
+                tempCh = S[cur];
+                count = 1;
+            }
+            cur++;
+        }
+        Map.push_back({tempCh,count});
+        
+        int ans = 0;
+        
+        for (string& n : words) {
+            tempCh = n[0];
+            count = 1;
+            cur = 1;
+            int Index = 0;
+            int lens = n.length();
+            bool flag = true;
+            while (cur < lens && Index < Map.size()) {
+                if (tempCh == n[cur]) {
+                    count++;
+                } else {
+                    if (tempCh != Map[Index].first || count > Map[Index].second || (Map[Index].second < 3 && count < Map[Index].second)) {
+                        flag = false;
+                        break;
+                    } else {
+                        tempCh = n[cur];
+                        count = 1;
+                        Index++;
+                    }
+                }
+                cur++;
+            }
+            if (Index != Map.size()-1 || tempCh != Map[Index].first || count > Map[Index].second || (Map[Index].second < 3 && count < Map[Index].second)) {
+                flag = false;
+            }
+            
+            
+            if (flag) {
+                ans++;
+            }
+            
+        }
+        
+        return ans;
+    }
+};
