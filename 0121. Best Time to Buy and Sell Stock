@@ -1,12 +1,37 @@
+// Method 1: O(n)
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
-        int minPrice = INT_MAX;
-        int maxProfit = 0;
-        for (int n:prices) {
-            minPrice = min(minPrice,n);
-            maxProfit = max(maxProfit,n - minPrice);
+        int len = prices.size();
+        if (len < 2) {
+            return 0;
         }
-        return maxProfit;
+        int ans = INT_MIN;
+        int tempMin = prices[0];
+        for (int i = 1; i < len; i++) {
+            ans = max(ans,prices[i] - tempMin);
+            tempMin = min(tempMin,prices[i]);
+        }
+        return ans > 0 ? ans:0;
+    }
+};
+
+
+
+
+// Method 2: O(n*n)
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int len = prices.size();
+        int ans = INT_MIN;
+        for (int i = 0; i < len-1; i++) {
+            for (int j = i+1; j < len; j++) {
+                int temp = prices[j] - prices[i];
+                ans = max(ans,temp);
+            }
+        }
+        return ans > 0 ? ans:0;
+        
     }
 };
