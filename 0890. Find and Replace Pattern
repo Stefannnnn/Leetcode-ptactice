@@ -1,0 +1,45 @@
+class Solution {
+public:
+    vector<string> findAndReplacePattern(vector<string>& words, string pattern) {
+        int len = words.size();
+        int pLen = pattern.length();
+        
+        vector<string> ans;
+        for (int i = 0; i < len; i++) {
+            int wLen = words[i].length();
+            if (wLen == pLen) {
+                unordered_map<char, int> pMap;   // char, index
+                unordered_map<char, int> wMap;   // char, index
+                bool flag = true;
+                // Judge if it's the same pattern
+                for (int j = 0; j < wLen; j++) {
+                    if ((pMap.count(pattern[j]) == 0 && wMap.count(words[i][j]) != 0) || (pMap.count(pattern[j]) != 0 && wMap.count(words[i][j]) == 0)) {
+                        flag = false;
+                        break;
+                    } else if (pMap.count(pattern[j]) == 0) {
+                        if (wMap.count(words[i][j]) == 0) {
+                            pMap[pattern[j]] = j;
+                            wMap[words[i][j]] = j;
+                        } else {
+                            flag = false;
+                            break;
+                        }
+                    } else {
+                        if (pMap[pattern[j]] != wMap[words[i][j]]) {
+                            flag = false;
+                            break;
+                        } else {
+                            pMap[pattern[j]] = j;
+                            wMap[words[i][j]] = j;
+                        }
+                    }
+                }
+                if (flag) {
+                    ans.push_back(words[i]);
+                }
+            }
+        }
+        
+        return ans;
+    }
+};
