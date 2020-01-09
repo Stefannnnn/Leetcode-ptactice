@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int bagOfTokensScore(vector<int>& tokens, int P) {
+        int len = tokens.size();
+        if (len == 0) {
+            return 0;
+        }
+        sort(tokens.begin(),tokens.end());
+        int left = 1;
+        int right = len-1;
+        int point = 1;
+        P -= tokens[0];
+        if (P < 0) {
+            return 0;
+        }
+        int ans = 1;
+        while (left <= right) {
+            if (P >= tokens[left]) {
+                point++;
+                ans = max(ans,point);
+                P -= tokens[left];
+                left++;
+            } else {
+                if (point > 0) {
+                    point--;
+                    P += tokens[right];
+                    right--;
+                } else {
+                    return point;
+                }
+            }
+        }
+        return ans;
+    }
+};
