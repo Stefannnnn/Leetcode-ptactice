@@ -1,0 +1,95 @@
+class Solution {
+public:
+    vector<int> sortItems(int n, int m, vector<int>& group, vector<vector<int>>& beforeItems) {
+        unordered_map<int, vector<int>> graph;
+        vector<vector<int>> verticesGroup(m, vector<int>());
+        for (int i = 0; i < n; i++) {
+            for (int beforeItem: beforeItems[i]) {
+                graph[beforeItem].push_back(i);
+            }
+            if (group[i] != -1) {
+                verticesGroup[group[i]].push_back(i);
+            }
+        }
+        for (int i = 0; i < m; i++) {
+            if (verticesGroup[i].size() != 0) {
+                verticesGroup[i] = topologicalSort(verticesGroup[i], graph);
+                if (verticesGroup[i].size() == 0) {
+                    return vector<int>();
+                }
+            }
+        }
+        graph.clear();
+        vector<int> newVertices;
+        for (int i = 0; i < n; i++) {
+            int newId = group[i] != -1 ? group[i] + n : i;
+            for (int beforeItem: beforeItems[i]) {
+                int newBeforeItem = group[beforeItem] != -1 ? group[beforeItem] + n : beforeItem;
+                if (newId != newBeforeItem) {
+                    graph[newBeforeItem].push_back(newId);
+                }
+            }
+            if (group[i] == -1) {
+                newVertices.push_back(i);
+            }
+        }
+        for (int i = 0; i < m; i++) {
+            if (verticesGroup.size() != 0) {
+                newVertices.push_back(i + n);
+            }
+        }
+        vector<int> sorted = topologicalSort(newVertices, graph);
+        if (sorted.size() == 0) {
+            return vector<int>();
+        }
+        vector<int> result;
+        for (int element : sorted) {
+            if (element >= n) {
+                for (int vertex : verticesGroup[element - n]) {
+                    result.push_back(vertex);
+                }
+            }
+            else {
+                result.push_back(element);
+            }
+        }
+        return result;
+    }
+    
+private:
+    vector<int> topologicalSort(vector<int>& vertices, unordered_map<int, vector<int>>& graph) {
+        unordered_map<int, int> visited;
+        vector<int> result;
+        for (int vertex : vertices) {
+            visited[vertex] = 0;
+        }
+        for (int vertex : vertices) {
+            if (visited[vertex] == 0) {
+                if (!DFS(vertex, visited, graph, result)) {
+                    return vector<int>();
+                }
+            }
+        }
+        reverse(result.begin(), result.end());
+        return result;
+    }
+    
+    bool DFS(int currentVertex, unordered_map<int, int>& visited, unordered_map<int, vector<int>>& graph, vector<int>& result) {
+        visited[currentVertex] = 1;
+        for (int vertex : graph[currentVertex]) {
+            if (visited.count(vertex)) {
+                if (visited[vertex] == 0) {
+                    if (!DFS(vertex, visited, graph, result)) {
+                        return false;
+                    }
+                }
+                else if (visited[vertex] == 1) {
+                    return false;
+                }
+            }
+        }
+        visited[currentVertex] = 2;
+        result.push_back(currentVertex);
+        return true;
+    }
+};
