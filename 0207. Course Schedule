@@ -1,0 +1,48 @@
+//reference : https://leetcode.com/problems/course-schedule/discuss/224406/Java-solution-with-a-lot-of-comments-BFS
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<pair<int, int>>& prerequisites) {
+        if(numCourses < 0){
+            return false;
+        }
+        if(prerequisites.size() < 2){
+            return true;
+        }
+        
+        //indegree is to record how many vertex point to it
+        vector<int> indegree(numCourses,0);
+        
+        for(auto n : prerequisites){
+            indegree[n.first]++;
+        }
+        
+        //Queue store vertex which no one points it(they are the root of the path)
+        queue<int> Queue;
+        for(int i=0;i<numCourses;i++){
+            if(indegree[i] == 0){
+                Queue.push(i);
+            }
+        }
+        
+        //check whether they point to someone
+        while(!Queue.empty()){
+            int temp = Queue.front();
+            Queue.pop();
+            
+            for(int i=0;i<prerequisites.size();i++){
+                if(prerequisites[i].second == temp){
+                    indegree[prerequisites[i].first]--;
+                    if(indegree[prerequisites[i].first] == 0){
+                        Queue.push(prerequisites[i].first);
+                    }
+                }
+            }
+        }
+        for(auto n:indegree){
+            if(n != 0){
+                return false;
+            }
+        }
+        return true;
+    }
+};
