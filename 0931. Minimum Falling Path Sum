@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int minFallingPathSum(vector<vector<int>>& A) {
+        int lenW = A.size();
+        int lenC = A[0].size();
+        
+        
+        for (int i = 1; i < lenW; i++) {
+            for (int j = 0; j < lenC; j++) {
+                int left = INT_MAX;
+                int middle = A[i-1][j];
+                int right = INT_MAX;
+                if (j-1 >= 0) {
+                    left = A[i-1][j-1];
+                }
+                if (j+1 < lenC) {
+                    right = A[i-1][j+1];
+                }
+                A[i][j] = A[i][j] + min(left,min(middle,right));
+            }
+        }
+        
+        int ans = INT_MAX;
+        for (int j = 0; j < lenC; j++) {
+            ans = min(ans,A[lenW-1][j]);
+        }
+        
+        
+        return ans;
+    }
+};
