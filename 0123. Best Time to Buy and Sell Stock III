@@ -37,7 +37,7 @@ class Solution {
 private:
     int helper (int i, int j, vector<int>& prices) {
         int len = j-i+1;
-        int ans = INT_MIN;
+        int ans = INT_MIN; 
         int tempMin = prices[i];
         for (int k = i+1; k <= j; k++) {
             ans = max(ans,prices[k] - tempMin);
