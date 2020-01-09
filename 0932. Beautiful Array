@@ -1,6 +1,6 @@
 // 2*n-1 + 2*n
-// 乘：2k != i+j : 2kX != X[i+j] 
-// 加：2k != i+j : 2k+X != i+j+X 
+// 乘：2A[k] != A[i]+A[j] : 2(A[k]X) != (A[i]X)+(A[j]X)
+// 加：2A[k] != A[i] + A[j] : 2A[k]+X != A[i]+A[j]+X : 2(A[k]+X/2) != (A[i]+X/2) + (A[j]+X/2) : 平移
 class Solution {
 public:
     vector<int> beautifulArray(int N) {
