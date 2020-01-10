@@ -1,4 +1,5 @@
 // Method 1: dp 
+// Note: Initilize to long, so that can store "INT_MIN - 3". max(int,int) or max(long,long), need to convert type
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
