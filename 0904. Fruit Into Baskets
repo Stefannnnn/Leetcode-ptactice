@@ -1,0 +1,49 @@
+class Solution {
+public:
+    int totalFruit(vector<int>& tree) {
+        int len = tree.size();
+        if (len == 1) {
+            return len;
+        }
+        
+        int left = 0; //index
+        int right = 1; //index
+        unordered_map<int,int> Map; // type, count
+        unordered_map<int,int>::iterator iter;
+        Map[tree[0]] = 1;
+        int ans = 1;
+        int temp = 0;
+        while (right < len) {
+            if (Map.count(tree[right]) > 0) {   // Already exit
+                Map[tree[right]]++;
+            } else if (Map.size() < 2) {    // Not exits, and size < 2
+                Map[tree[right]] = 1;
+            } else {    // Has to erase
+                iter = Map.begin();
+                temp = iter->second;
+                iter++;
+                temp += iter->second;
+                ans = max(ans,temp);
+                while (1) {
+                    iter = Map.find(tree[left]);
+                    iter->second = iter->second - 1;
+                    if (iter->second == 0) {
+                        Map.erase(iter);
+                        left++;
+                        Map[tree[right]] = 1;
+                        break;
+                    } else {
+                        left++;
+                    }
+                }
+            }
+            right++;
+        }
+        temp = 0;
+        for (iter = Map.begin(); iter != Map.end(); iter++) {
+            temp += iter->second;
+        }
+        ans = max(ans,temp);
+        return ans;
+    }
+};
