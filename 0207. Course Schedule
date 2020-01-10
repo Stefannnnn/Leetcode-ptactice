@@ -1,3 +1,44 @@
+// Method 1:
+class Solution {
+private:
+    unordered_map<int,vector<int>> Map;
+    
+    bool helper (int cur, vector<int>& visited) {
+        if (visited[cur] == 1) {
+            return false;
+        } else if (visited[cur] == 2) {
+            return true;
+        }
+        visited[cur] = 1;
+        bool flag = true;
+        for (int& n: Map[cur]) {
+            flag = flag && helper(n,visited);
+        }
+        visited[cur] = 2;
+        return flag;
+    }
+    
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        for (vector<int>& vec : prerequisites) {
+            Map[vec[1]].push_back(vec[0]);
+        }
+        vector<int> visited(numCourses,0);
+        for (int i = 0; i < numCourses; i++) {
+            if (visited[i] == 0) {
+                bool flag = helper(i,visited);
+                if (!flag) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+};
+
+
+
+// Method 2 : BFS
 //reference : https://leetcode.com/problems/course-schedule/discuss/224406/Java-solution-with-a-lot-of-comments-BFS
 class Solution {
 public:
@@ -46,3 +87,5 @@ public:
         return true;
     }
 };
+
+
