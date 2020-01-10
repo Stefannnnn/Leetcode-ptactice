@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int maxProfit(int k, vector<int>& prices) {
+        int len = prices.size();
+        if (len < 2 || k == 0) {
+            return 0;
+        }
+        if (k > len/2) {
+            k = len/2;
+        }
+        vector<long> firstRow(len,0);
+        vector<vector<long>> table(2,vector<long>(len,INT_MIN));
+        table[0][0] = -prices[0];
+        // k == 1
+        for (int i = 1; i < len; i++) {
+            table[0][i] = max(table[0][i-1],(long)-prices[i]);
+            table[1][i] = max(table[1][i-1],table[0][i-1]+prices[i]);
+            firstRow[i] = table[1][i];
+        }
+        int ans = table[1][len-1];
+        // k > 1
+        for (int row = 2; row < 2*k; row = row + 2) {    //row
+            vector<vector<long>> table1(2,vector<long>(len,INT_MIN));
+            int temp = firstRow[1];
+            for (int col = 2; col < len; col++) {
+                table1[0][col] = max(table1[0][col-1],(long)temp-prices[col]);
+                table1[1][col] = max(table1[1][col-1],table1[0][col-1]+prices[col]);
+                temp = firstRow[col];
+                firstRow[col] = table1[1][col];
+            }
+            ans = max(ans,(int)table1[1][len-1]);
+        }
+        return ans > 0 ? ans : 0;
+    }
+};
