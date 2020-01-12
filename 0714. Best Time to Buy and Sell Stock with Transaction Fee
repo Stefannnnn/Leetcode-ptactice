@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int maxProfit(vector<int>& prices, int fee) {
+        int len = prices.size();
+        if (len < 2) {
+            return 0;
+        }
+        
+        int s1 = -prices[0]-fee;    //s1:buy
+        int s2 = 0;                 //s2:sell
+        
+        for (int i = 1; i < len; i++) {
+            s1 = max(s1,s2-prices[i]-fee);  // (前一次買,前一次賣然後現在買)
+            s2 = max(s2,s1+prices[i]);      // (前一次賣,前一次買這次賣) 
+        }
+        
+        return max(0,s2);
+    }
+};
