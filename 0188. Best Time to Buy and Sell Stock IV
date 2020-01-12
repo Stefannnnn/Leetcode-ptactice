@@ -5,8 +5,14 @@ public:
         if (len < 2 || k == 0) {
             return 0;
         }
-        if (k > len/2) {
-            k = len/2;
+        int ans = 0;
+        if (k > len/2) {    // equal to can do unlimisted times
+            for (int i = 1; i < len; i++) {
+                if (prices[i] - prices[i-1] > 0) {
+                    ans += prices[i] - prices[i-1];
+                }
+            }
+            return ans;
         }
         vector<long> firstRow(len,0);
         vector<vector<long>> table(2,vector<long>(len,INT_MIN));
@@ -17,7 +23,7 @@ public:
             table[1][i] = max(table[1][i-1],table[0][i-1]+prices[i]);
             firstRow[i] = table[1][i];
         }
-        int ans = table[1][len-1];
+        ans = table[1][len-1];
         // k > 1
         for (int row = 2; row < 2*k; row = row + 2) {    //row
             vector<vector<long>> table1(2,vector<long>(len,INT_MIN));
