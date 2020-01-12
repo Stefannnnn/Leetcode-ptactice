@@ -1,0 +1,34 @@
+class Solution {
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+        int len = nums.size();
+        vector<vector<int>> ans;
+        if (len == 0) {
+            return ans;
+        } else if (len == 1) {
+            vector<int> v(1,1);
+            ans.push_back(v);
+            return ans;
+        }
+        
+        helper(nums,0,ans);
+        return ans;
+    }
+    
+private:
+    void helper (vector<int>& nums, int cur, vector<vector<int>>& ans) {
+        int len = nums.size();
+        if (cur >= len) {
+            ans.push_back(nums);
+            return;
+        }
+        
+        for (int i = cur; i < len; i++) {
+            swap(nums[cur],nums[i]);
+            helper(nums,cur+1,ans);
+            // reset
+            swap(nums[cur],nums[i]);
+        }
+        return;
+    }    
+};
