@@ -1,0 +1,57 @@
+// Method 1: dp , fast
+class Solution {
+public:
+    int minimumTotal(vector<vector<int>>& triangle) {
+        int len = triangle.size();
+        if (len == 1) {
+            return triangle[0][0];
+        }
+        vector<vector<int>> table(len,vector<int>(len,INT_MAX));
+        table[0][0] = triangle[0][0];
+        int ans = INT_MAX;
+        for (int i = 1; i < len; i++) {
+            int len1 = triangle[i].size();
+            for (int j = 0; j < len1; j++) {
+                if (j == 0) {
+                    table[i][j] = triangle[i][j] + table[i-1][j];
+                } else {
+                    table[i][j] = triangle[i][j] + min(table[i-1][j],table[i-1][j-1]);
+                }
+                if (i == len-1) {
+                    ans = min(ans,table[i][j]);
+                }
+            }
+        }
+        return ans;
+    }
+};
+
+// Method 2: slow
+class Solution {
+public:
+    int minimumTotal(vector<vector<int>>& triangle) {
+        int len = triangle.size();
+        if (len == 1) {
+            return triangle[0][0];
+        }
+        ans = INT_MAX;
+        helper(1,0,triangle[0][0],len,triangle);
+        return ans;
+    }
+    
+private:
+    int ans;
+    
+    void helper (int curLevel, int curIndex, int sum, int len, vector<vector<int>>& triangle) {
+        if (curLevel == len-1) {
+            sum += min(triangle[curLevel][curIndex],triangle[curLevel][curIndex+1]);
+            ans = min(ans,sum);
+            return;
+        }
+        int sum1 = sum + triangle[curLevel][curIndex];
+        int sum2 = sum + triangle[curLevel][curIndex+1];
+        helper(curLevel+1,curIndex,sum1,len,triangle);
+        helper(curLevel+1,curIndex+1,sum2,len,triangle);
+    }
+    
+};
