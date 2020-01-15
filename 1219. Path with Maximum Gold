@@ -1,3 +1,5 @@
+// 每個grid去找，每到一個grid,把自己記錄下來，然後把自己改成0(因為題目說0不visit)，找4個方向的DFS,回傳max(四個方向)+自己
+
 class Solution { 
 public:
     int getMaximumGold(vector<vector<int>>& grid) {
